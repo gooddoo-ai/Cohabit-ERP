@@ -3,1425 +3,1040 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>COLDCUT ERP — 냉동육 가공 통합관리시스템</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>COLDCUT ERP — 냉동육 가공 통합관리</title>
 <style>
-/* ──────────────────────────────────
-   DESIGN TOKENS
-────────────────────────────────── */
-:root {
-  --white:    #ffffff;
-  --bg:       #f4f6f9;
-  --bg2:      #eef0f5;
-  --border:   #e4e7ed;
-  --border2:  #d0d4de;
-  --txt:      #1a1f36;
-  --txt2:     #6b7280;
-  --txt3:     #9ca3af;
-
-–brand:    #f97316;
-–brand-lt: #fff7ed;
-–brand-dk: #ea580c;
-
-–blue:     #3b82f6;
-–blue-lt:  #eff6ff;
-–green:    #16a34a;
-–green-lt: #f0fdf4;
-–red:      #dc2626;
-–red-lt:   #fef2f2;
-–yellow:   #d97706;
-–yellow-lt:#fffbeb;
-–purple:   #7c3aed;
-–purple-lt:#f5f3ff;
-–cyan:     #0891b2;
-–cyan-lt:  #ecfeff;
-
-–shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-–shadow:    0 2px 8px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.05);
-–shadow-md: 0 4px 16px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.05);
-
-–radius:    10px;
-–radius-sm: 6px;
-–sidebar-w: 228px;
+:root{
+  --bg:#f4f6f9;--bg2:#eef0f5;--white:#fff;
+  --border:#e4e7ed;--border2:#d0d4de;
+  --txt:#1a1f36;--txt2:#6b7280;--txt3:#9ca3af;
+  --brand:#f97316;--brand-lt:#fff7ed;--brand-dk:#ea580c;
+  --blue:#3b82f6;--blue-lt:#eff6ff;
+  --green:#16a34a;--green-lt:#f0fdf4;
+  --red:#dc2626;--red-lt:#fef2f2;
+  --yellow:#d97706;--yellow-lt:#fffbeb;
+  --purple:#7c3aed;--purple-lt:#f5f3ff;
+  --cyan:#0891b2;--cyan-lt:#ecfeff;
+  --r:10px;--rs:6px;--sw:228px;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-size:13.5px}
+body{font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;background:var(--bg);color:var(--txt);display:flex;overflow:hidden}
+button,input,select{font-family:inherit}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
 
-/* ──────────────────────────────────
-RESET & BASE
-────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; font-size: 13.5px; }
-body {
-font-family: ‘Apple SD Gothic Neo’, ‘Noto Sans KR’, ‘Malgun Gothic’, sans-serif;
-background: var(–bg);
-color: var(–txt);
-display: flex;
-overflow: hidden;
-}
-button { font-family: inherit; cursor: pointer; }
-input, select { font-family: inherit; }
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(–border2); border-radius: 4px; }
+/* SIDEBAR */
+#sb{width:var(–sw);min-width:var(–sw);background:var(–white);border-right:1px solid var(–border);display:flex;flex-direction:column;height:100vh}
+.logo{padding:18px 18px 14px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:10px}
+.logo-ic{width:34px;height:34px;background:var(–brand);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(249,115,22,.3)}
+.logo-ic svg{width:17px;height:17px;color:#fff}
+.logo-name{font-size:14px;font-weight:800;letter-spacing:-.3px}
+.logo-sub{font-size:10px;color:var(–txt3);margin-top:1px}
+nav{flex:1;overflow-y:auto;padding:8px 10px}
+.ng-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;color:var(–txt3);padding:10px 8px 4px;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(–rs);color:var(–txt2);cursor:pointer;transition:all .12s;font-size:13px;font-weight:500}
+.ni:hover{background:var(–bg);color:var(–txt)}
+.ni.active{background:var(–brand-lt);color:var(–brand);font-weight:600}
+.ni svg{width:14px;height:14px;flex-shrink:0}
+.nb{margin-left:auto;background:var(–red);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 6px}
+.ai-nb{margin-left:auto;background:linear-gradient(135deg,#f97316,#7c3aed);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 7px}
+.sb-user{padding:12px 16px;border-top:1px solid var(–border);display:flex;align-items:center;gap:10px}
+.av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(–brand),#fb923c);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.un{font-size:12px;font-weight:600}
+.ur{font-size:10px;color:var(–txt3);margin-top:1px}
 
-/* ──────────────────────────────────
-SIDEBAR
-────────────────────────────────── */
-#sidebar {
-width: var(–sidebar-w);
-min-width: var(–sidebar-w);
-background: var(–white);
-border-right: 1px solid var(–border);
-display: flex;
-flex-direction: column;
-height: 100vh;
-position: sticky;
-top: 0;
-overflow: hidden;
-}
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0}
+.topbar{background:var(–white);border-bottom:1px solid var(–border);height:54px;padding:0 22px;display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.tb-title{font-size:15px;font-weight:700}
+.tb-sep{color:var(–border2)}
+.tb-bread{font-size:12px;color:var(–txt3)}
+.tb-r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.tb-time{font-size:11.5px;color:var(–txt2);font-family:monospace;background:var(–bg);padding:4px 10px;border-radius:20px;border:1px solid var(–border)}
+#content{flex:1;overflow-y:auto;padding:20px 22px 32px}
 
-.logo-area {
-padding: 20px 20px 16px;
-border-bottom: 1px solid var(–border);
-display: flex;
-align-items: center;
-gap: 11px;
-}
-.logo-icon {
-width: 36px; height: 36px;
-background: var(–brand);
-border-radius: 9px;
-display: flex; align-items: center; justify-content: center;
-flex-shrink: 0;
-box-shadow: 0 2px 8px rgba(249,115,22,.35);
-}
-.logo-icon svg { width: 18px; height: 18px; color: #fff; }
-.logo-text { line-height: 1.25; }
-.logo-name { font-size: 14.5px; font-weight: 800; letter-spacing: -.3px; color: var(–txt); }
-.logo-sub  { font-size: 10px; color: var(–txt3); font-weight: 500; margin-top: 1px; }
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(–rs);font-size:12px;font-weight:600;border:none;transition:all .12s;line-height:1;white-space:nowrap;cursor:pointer}
+.btn-p{background:var(–brand);color:#fff;box-shadow:0 1px 4px rgba(249,115,22,.25)}
+.btn-p:hover{background:var(–brand-dk)}
+.btn-s{background:var(–white);color:var(–txt);border:1px solid var(–border);box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.btn-s:hover{background:var(–bg);border-color:var(–border2)}
+.btn-sm{padding:5px 11px;font-size:11.5px}
+.btn svg{width:12px;height:12px}
 
-nav { flex: 1; overflow-y: auto; padding: 10px 10px; }
-.nav-group { margin-bottom: 4px; }
-.nav-group-label {
-font-size: 10px; font-weight: 700; letter-spacing: .8px;
-color: var(–txt3); padding: 10px 10px 4px; text-transform: uppercase;
-}
-.nav-item {
-display: flex; align-items: center; gap: 9px;
-padding: 8px 10px; border-radius: var(–radius-sm);
-color: var(–txt2); cursor: pointer;
-transition: background .12s, color .12s;
-font-size: 13px; font-weight: 500; position: relative;
-}
-.nav-item:hover { background: var(–bg); color: var(–txt); }
-.nav-item.active { background: var(–brand-lt); color: var(–brand); font-weight: 600; }
-.nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
-.nav-badge {
-margin-left: auto; background: var(–red); color: #fff;
-font-size: 9px; font-weight: 700; border-radius: 10px;
-padding: 1px 6px; line-height: 1.6;
-}
+/* CARDS */
+.card{background:var(–white);border:1px solid var(–border);border-radius:var(–r);padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ct{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
+.cti{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cti svg{width:14px;height:14px}
 
-.sidebar-user {
-padding: 12px 16px; border-top: 1px solid var(–border);
-display: flex; align-items: center; gap: 10px;
-}
-.avatar {
-width: 30px; height: 30px; border-radius: 50%;
-background: linear-gradient(135deg, var(–brand), #fb923c);
-color: #fff; font-size: 12px; font-weight: 700;
-display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.user-name { font-size: 12.5px; font-weight: 600; }
-.user-role { font-size: 10.5px; color: var(–txt3); margin-top: 1px; }
+/* KPI */
+.kc{padding:16px 18px}
+.kl{font-size:11px;font-weight:600;color:var(–txt2);margin-bottom:4px}
+.kv{font-size:24px;font-weight:800;letter-spacing:-1px;line-height:1}
+.kv span{font-size:13px;font-weight:600;color:var(–txt2);letter-spacing:0;margin-left:2px}
+.kf{margin-top:8px;display:flex;align-items:center;gap:6px}
+.kc-up{background:var(–green-lt);color:var(–green);font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:20px}
+.kc-dn{background:var(–red-lt);color:var(–red);font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:20px}
+.ks{font-size:11px;color:var(–txt3)}
 
-/* ──────────────────────────────────
-MAIN LAYOUT
-────────────────────────────────── */
-#main {
-flex: 1; display: flex; flex-direction: column;
-height: 100vh; overflow: hidden; min-width: 0;
-}
+/* GRID */
+.g{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g6{grid-template-columns:repeat(6,1fr)}
+.g64{grid-template-columns:6fr 4fr}
+.g32{grid-template-columns:3fr 2fr}
+.g21{grid-template-columns:2fr 1fr}
+.mb{margin-bottom:14px}
+.mt{margin-top:14px}
 
-/* TOPBAR */
-.topbar {
-background: var(–white); border-bottom: 1px solid var(–border);
-height: 56px; padding: 0 24px;
-display: flex; align-items: center; gap: 14px;
-flex-shrink: 0; box-shadow: var(–shadow-sm);
-}
-.topbar-title { font-size: 15.5px; font-weight: 700; }
-.topbar-sep { color: var(–border2); }
-.topbar-bread { font-size: 12px; color: var(–txt3); }
-.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-.topbar-time { font-size: 12px; color: var(–txt2); font-family: ‘SF Mono’, ‘Consolas’, monospace; background: var(–bg); padding: 4px 10px; border-radius: 20px; border: 1px solid var(–border); }
+/* TABLE */
+.tw{overflow-x:auto;margin:0 -18px -18px}
+.tw table{width:100%;border-collapse:collapse;min-width:600px}
+.tw thead tr{border-bottom:2px solid var(–border)}
+th{padding:8px 14px;text-align:left;font-size:10px;font-weight:700;color:var(–txt3);letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;background:var(–bg)}
+td{padding:10px 14px;border-bottom:1px solid var(–border);font-size:12px;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(–bg)}
+.mono{font-family:monospace;font-size:11.5px}
 
-/* CONTENT */
-#content { flex: 1; overflow-y: auto; padding: 22px 24px 32px; }
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
+.badge::before{content:’’;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.8}
+.bg{background:var(–green-lt);color:var(–green)}
+.br{background:var(–red-lt);color:var(–red)}
+.by{background:var(–yellow-lt);color:var(–yellow)}
+.bb{background:var(–blue-lt);color:var(–blue)}
+.bp{background:var(–purple-lt);color:var(–purple)}
+.bc{background:var(–cyan-lt);color:var(–cyan)}
+.bgr{background:var(–bg2);color:var(–txt2)}
+.bn{background:var(–brand-lt);color:var(–brand)}
 
-/* ──────────────────────────────────
-BUTTONS
-────────────────────────────────── */
-.btn {
-display: inline-flex; align-items: center; gap: 5px;
-padding: 7px 14px; border-radius: var(–radius-sm);
-font-size: 12.5px; font-weight: 600; border: none;
-transition: all .12s; line-height: 1; white-space: nowrap;
-}
-.btn-primary  { background: var(–brand); color: #fff; box-shadow: 0 1px 4px rgba(249,115,22,.3); }
-.btn-primary:hover { background: var(–brand-dk); }
-.btn-secondary{ background: var(–white); color: var(–txt); border: 1px solid var(–border); box-shadow: var(–shadow-sm); }
-.btn-secondary:hover { border-color: var(–border2); background: var(–bg); }
-.btn-danger   { background: var(–red-lt); color: var(–red); border: 1px solid #fecaca; }
-.btn-danger:hover { background: #fee2e2; }
-.btn-sm { padding: 5px 11px; font-size: 11.5px; }
-.btn svg { width: 13px; height: 13px; }
+/* PROGRESS */
+.prog{height:5px;background:var(–bg2);border-radius:3px;overflow:hidden}
+.pf{height:100%;border-radius:3px}
 
-/* ──────────────────────────────────
-CARDS
-────────────────────────────────── */
-.card {
-background: var(–white); border: 1px solid var(–border);
-border-radius: var(–radius); padding: 20px;
-box-shadow: var(–shadow-sm);
-}
-.card-header {
-display: flex; align-items: center; justify-content: space-between;
-margin-bottom: 16px;
-}
-.card-title { font-size: 13.5px; font-weight: 700; color: var(–txt); display: flex; align-items: center; gap: 7px; }
-.card-title-icon { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.card-title-icon svg { width: 14px; height: 14px; }
+/* NOTICE */
+.notice{display:flex;align-items:center;gap:9px;padding:10px 14px;border-radius:var(–rs);font-size:12px;font-weight:500;margin-bottom:12px}
+.notice svg{width:14px;height:14px;flex-shrink:0}
+.nw{background:var(–yellow-lt);color:var(–yellow);border:1px solid #fde68a}
+.ne{background:var(–red-lt);color:var(–red);border:1px solid #fecaca}
+.nok{background:var(–green-lt);color:var(–green);border:1px solid #bbf7d0}
+.ni2{background:var(–blue-lt);color:var(–blue);border:1px solid #bfdbfe}
 
-/* ──────────────────────────────────
-KPI CARDS
-────────────────────────────────── */
-.kpi-card { padding: 18px 20px; }
-.kpi-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
-.kpi-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
-.kpi-icon svg { width: 18px; height: 18px; }
-.kpi-label { font-size: 11.5px; font-weight: 600; color: var(–txt2); margin-bottom: 4px; }
-.kpi-value { font-size: 26px; font-weight: 800; letter-spacing: -1px; line-height: 1; color: var(–txt); }
-.kpi-value span { font-size: 14px; font-weight: 600; color: var(–txt2); letter-spacing: 0; margin-left: 2px; }
-.kpi-footer { margin-top: 10px; display: flex; align-items: center; gap: 6px; }
-.kpi-change { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
-.kpi-up   { background: var(–green-lt); color: var(–green); }
-.kpi-down { background: var(–red-lt);   color: var(–red); }
-.kpi-neu  { background: var(–bg2);      color: var(–txt2); }
-.kpi-sub-label { font-size: 11px; color: var(–txt3); }
+/* STAT LIST */
+.sl{list-style:none}
+.si{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(–border)}
+.si:last-child{border-bottom:none}
+.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sl-l{flex:1;font-size:12px;color:var(–txt2)}
+.sl-v{font-size:12.5px;font-weight:700;font-family:monospace}
+.sl-p{font-size:10.5px;color:var(–txt3);min-width:32px;text-align:right}
 
-/* ──────────────────────────────────
-GRID
-────────────────────────────────── */
-.grid { display: grid; gap: 16px; }
-.g2 { grid-template-columns: 1fr 1fr; }
-.g3 { grid-template-columns: 1fr 1fr 1fr; }
-.g4 { grid-template-columns: repeat(4, 1fr); }
-.g-6-4 { grid-template-columns: 6fr 4fr; }
-.g-2-1 { grid-template-columns: 2fr 1fr; }
-.g-3-2 { grid-template-columns: 3fr 2fr; }
-.mb16 { margin-bottom: 16px; }
-.mb20 { margin-bottom: 20px; }
+/* TIMELINE */
+.tl{list-style:none}
+.tl li{display:flex;gap:10px;padding:7px 0;position:relative}
+.tl li:not(:last-child)::after{content:’’;position:absolute;left:5px;top:20px;bottom:0;width:1px;background:var(–border)}
+.tl-dot{width:11px;height:11px;border-radius:50%;border:2px solid var(–white);flex-shrink:0;margin-top:2px;box-shadow:0 0 0 1px var(–border2)}
+.tl-t{font-size:10px;color:var(–txt3);font-family:monospace}
+.tl-x{font-size:12px;color:var(–txt2);margin-top:2px}
 
-/* ──────────────────────────────────
-TABLE
-────────────────────────────────── */
-.table-wrap { overflow-x: auto; margin: 0 -20px -20px; }
-.table-wrap table { width: 100%; border-collapse: collapse; min-width: 640px; }
-.table-wrap thead tr { border-bottom: 2px solid var(–border); }
-th {
-padding: 9px 16px; text-align: left;
-font-size: 10.5px; font-weight: 700; color: var(–txt3);
-letter-spacing: .5px; text-transform: uppercase; white-space: nowrap;
-background: var(–bg);
-}
-td { padding: 11px 16px; border-bottom: 1px solid var(–border); font-size: 12.5px; white-space: nowrap; color: var(–txt); }
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: var(–bg); }
-.td-mono { font-family: ‘SF Mono’,‘Consolas’,monospace; font-size: 12px; }
+/* TABS */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(–border);margin-bottom:16px}
+.tab{padding:8px 14px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(–txt3);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .12s;border-radius:5px 5px 0 0}
+.tab:hover:not(.active){color:var(–txt);background:var(–bg)}
+.tab.active{color:var(–brand);border-bottom-color:var(–brand)}
 
-/* ──────────────────────────────────
-BADGES
-────────────────────────────────── */
-.badge {
-display: inline-flex; align-items: center; gap: 4px;
-padding: 3px 9px; border-radius: 20px;
-font-size: 10.5px; font-weight: 700; white-space: nowrap;
-}
-.badge::before { content:’’; width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.8; }
-.b-green  { background:var(–green-lt);  color:var(–green); }
-.b-red    { background:var(–red-lt);    color:var(–red); }
-.b-yellow { background:var(–yellow-lt); color:var(–yellow); }
-.b-blue   { background:var(–blue-lt);   color:var(–blue); }
-.b-purple { background:var(–purple-lt); color:var(–purple); }
-.b-cyan   { background:var(–cyan-lt);   color:var(–cyan); }
-.b-gray   { background:var(–bg2);       color:var(–txt2); }
-.b-brand  { background:var(–brand-lt);  color:var(–brand); }
+/* TEMP */
+.temp{font-size:11px;font-family:monospace;font-weight:700;padding:2px 8px;border-radius:4px}
+.tok{background:var(–cyan-lt);color:var(–cyan)}
+.twn{background:var(–yellow-lt);color:var(–yellow)}
+.lot{font-size:10px;font-family:monospace;font-weight:700;background:var(–blue-lt);color:var(–blue);padding:2px 6px;border-radius:4px;border:1px solid #bfdbfe}
 
-/* ──────────────────────────────────
-PROGRESS BAR
-────────────────────────────────── */
-.prog { height: 5px; background: var(–bg2); border-radius: 3px; overflow: hidden; }
-.prog-fill { height: 100%; border-radius: 3px; }
+/* DIVIDER */
+hr{border:none;border-top:1px solid var(–border);margin:12px 0}
 
-/* ──────────────────────────────────
-ALERT / NOTICE
-────────────────────────────────── */
-.notice {
-display: flex; align-items: center; gap: 10px;
-padding: 11px 16px; border-radius: var(–radius-sm);
-font-size: 12.5px; font-weight: 500; margin-bottom: 14px;
-}
-.notice svg { width: 15px; height: 15px; flex-shrink: 0; }
-.notice-warn  { background:var(–yellow-lt); color:var(–yellow); border:1px solid #fde68a; }
-.notice-err   { background:var(–red-lt);    color:var(–red);    border:1px solid #fecaca; }
-.notice-ok    { background:var(–green-lt);  color:var(–green);  border:1px solid #bbf7d0; }
-.notice-info  { background:var(–blue-lt);   color:var(–blue);   border:1px solid #bfdbfe; }
+/* PAGE */
+.page{display:none}
+.page.active{display:block}
 
-/* ──────────────────────────────────
-STAT ROWS
-────────────────────────────────── */
-.stat-list { list-style: none; }
-.stat-item {
-display: flex; align-items: center; gap: 10px;
-padding: 9px 0; border-bottom: 1px solid var(–border);
-}
-.stat-item:last-child { border-bottom: none; }
-.stat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.stat-label { flex: 1; font-size: 12.5px; color: var(–txt2); }
-.stat-val   { font-size: 13px; font-weight: 700; color: var(–txt); font-family:‘SF Mono’,‘Consolas’,monospace; }
-.stat-pct   { font-size: 11px; color: var(–txt3); min-width: 32px; text-align: right; }
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.25);backdrop-filter:blur(2px);z-index:200;align-items:center;justify-content:center}
+.mbg.open{display:flex}
+.mbox{background:var(–white);border-radius:14px;padding:24px 26px;width:480px;max-width:95vw;box-shadow:0 8px 32px rgba(0,0,0,.1),0 0 0 1px var(–border);animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.mt2{font-size:15px;font-weight:800;margin-bottom:18px}
+.fr{margin-bottom:12px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(–txt2);margin-bottom:4px}
+.fc{width:100%;padding:8px 11px;background:var(–white);border:1.5px solid var(–border);border-radius:var(–rs);color:var(–txt);font-size:13px}
+.fc:focus{outline:none;border-color:var(–brand)}
+select.fc{appearance:none;background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ fill=‘none’ viewBox=‘0 0 24 24’ stroke=’%239ca3af’ stroke-width=‘2’%3E%3Cpath d=‘M19 9l-7 7-7-7’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 9px center;background-size:13px;padding-right:28px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mf{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
 
-/* ──────────────────────────────────
-TIMELINE
-────────────────────────────────── */
-.tl { list-style: none; }
-.tl-item { display: flex; gap: 12px; padding: 8px 0; position: relative; }
-.tl-item:not(:last-child)::after {
-content:’’; position:absolute; left:5px; top:22px; bottom:0;
-width:1px; background:var(–border);
-}
-.tl-dot { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(–white); flex-shrink: 0; margin-top: 3px; box-shadow: 0 0 0 1px var(–border2); }
-.tl-time { font-size: 10.5px; color: var(–txt3); font-family: monospace; }
-.tl-text { font-size: 12.5px; color: var(–txt2); margin-top: 2px; }
-.tl-text b { color: var(–txt); }
+/* TOAST */
+#toast{position:fixed;bottom:20px;right:20px;z-index:999;color:#fff;padding:11px 16px;border-radius:8px;font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:9px;box-shadow:0 4px 16px rgba(0,0,0,.15);transform:translateY(14px);opacity:0;transition:all .25s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.tok2{background:var(–green)}
+#toast.twn2{background:var(–yellow)}
+#toast svg{width:15px;height:15px}
 
-/* ──────────────────────────────────
-TABS
-────────────────────────────────── */
-.tabs { display: flex; gap: 2px; border-bottom: 2px solid var(–border); margin-bottom: 18px; }
-.tab {
-padding: 9px 16px; cursor: pointer; font-size: 13px; font-weight: 600;
-color: var(–txt3); border-bottom: 2px solid transparent; margin-bottom: -2px;
-transition: all .12s; border-radius: 6px 6px 0 0;
-}
-.tab:hover:not(.active) { color: var(–txt); background: var(–bg); }
-.tab.active { color: var(–brand); border-bottom-color: var(–brand); }
+/* ── AI MODULE ── */
+.ai-hdr{background:linear-gradient(135deg,#1a1f36 0%,#312e81 50%,#1e1b4b 100%);border-radius:var(–r);padding:22px 26px;margin-bottom:14px;position:relative;overflow:hidden}
+.ai-hdr::before{content:’’;position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(124,58,237,.35) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(249,115,22,.2) 0%,transparent 50%)}
+.ai-hi{position:relative;z-index:1}
+.ai-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 11px;font-size:10.5px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:9px;letter-spacing:.4px}
+.ai-badge svg{width:11px;height:11px}
+.ai-title{font-size:19px;font-weight:800;color:#fff;margin-bottom:5px;letter-spacing:-.5px}
+.ai-desc{font-size:12px;color:rgba(255,255,255,.65);line-height:1.6}
+.ai-chips{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.ai-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:4px 11px;font-size:11px;color:rgba(255,255,255,.8);font-weight:600}
+.ai-chip b{color:#fbbf24}
 
-/* ──────────────────────────────────
-TEMPERATURE TAG
-────────────────────────────────── */
-.temp { font-size: 11px; font-family: monospace; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
-.temp-ok   { background:var(–cyan-lt);  color:var(–cyan); }
-.temp-warn { background:var(–yellow-lt);color:var(–yellow); }
-.lot-tag {
-font-size: 10.5px; font-family: monospace; font-weight: 700;
-background: var(–blue-lt); color: var(–blue);
-padding: 2px 7px; border-radius: 4px; border: 1px solid #bfdbfe;
-}
+/* CCC Waterfall */
+.ccc-wf{display:flex;align-items:stretch;gap:0;margin-bottom:14px}
+.ccc-blk{flex:1;display:flex;flex-direction:column;align-items:center;padding:11px 6px;border-radius:8px}
+.ccc-v{font-size:20px;font-weight:800;font-family:monospace;line-height:1}
+.ccc-l{font-size:10px;font-weight:700;margin-top:3px}
+.ccc-s{font-size:9.5px;margin-top:2px;text-align:center;color:var(–txt3)}
+.ccc-arr{display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;padding:0 5px;color:var(–txt3)}
+.ccc-res{background:linear-gradient(135deg,#1a1f36,#312e81);border-radius:8px;padding:11px 16px;text-align:center;color:#fff;flex:1.2}
+.ccc-res .ccc-v{color:#fbbf24}
+.ccc-res .ccc-l{color:rgba(255,255,255,.7)}
 
-/* ──────────────────────────────────
-SECTION HEADER
-────────────────────────────────── */
-.sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.sec-title { font-size: 13px; font-weight: 700; color: var(–txt); display: flex; align-items: center; gap: 6px; }
-.sec-title svg { width: 15px; height: 15px; color: var(–brand); }
+/* SCENARIO */
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.sc-card{background:var(–white);border:1.5px solid var(–border);border-radius:var(–r);padding:16px;position:relative;transition:border-color .15s,box-shadow .15s;cursor:pointer}
+.sc-card:hover{border-color:var(–brand);box-shadow:0 0 0 3px rgba(249,115,22,.08)}
+.sc-card.on{border-color:var(–brand);box-shadow:0 0 0 3px rgba(249,115,22,.1);background:var(–brand-lt)}
+.sc-num{position:absolute;top:-1px;right:12px;background:var(–brand);color:#fff;font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:0 0 6px 6px;letter-spacing:.4px}
+.sc-t{font-size:13px;font-weight:800;color:var(–txt);margin-bottom:4px;padding-right:38px}
+.sc-d{font-size:11.5px;color:var(–txt2);margin-bottom:10px;line-height:1.5}
+.sc-m{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px}
+.sm{background:var(–bg);border-radius:6px;padding:7px 9px;text-align:center}
+.sm-l{font-size:9px;color:var(–txt3);font-weight:600;margin-bottom:2px;letter-spacing:.3px}
+.sm-b{font-size:10.5px;color:var(–txt2);font-family:monospace;text-decoration:line-through}
+.sm-a{font-size:13.5px;font-weight:800;font-family:monospace}
+.sc-imp{display:flex;align-items:center;justify-content:space-between;background:var(–green-lt);border:1px solid #bbf7d0;border-radius:6px;padding:7px 11px}
+.si-l{font-size:11px;color:var(–green);font-weight:700}
+.si-v{font-size:14px;font-weight:800;color:var(–green);font-family:monospace}
+.sc-tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.stag{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(–bg2);color:var(–txt2)}
+.sh{background:var(–red-lt);color:var(–red)}
+.sm2{background:var(–yellow-lt);color:var(–yellow)}
+.se{background:var(–green-lt);color:var(–green)}
 
-/* ──────────────────────────────────
-DIVIDER
-────────────────────────────────── */
-.divider { border: none; border-top: 1px solid var(–border); margin: 14px 0; }
+/* SIMULATOR */
+.sim-box{background:linear-gradient(135deg,#f0fdf4,#ecfeff);border:2px solid #6ee7b7;border-radius:var(–r);padding:20px 22px}
+.sim-title{font-size:13.5px;font-weight:800;color:var(–txt);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.sim-cks{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.sck{background:var(–white);border:1.5px solid var(–border);border-radius:8px;padding:9px 10px;cursor:pointer;transition:all .12s;text-align:center}
+.sck.on{border-color:var(–green);background:var(–green-lt)}
+.sck-n{font-size:10px;font-weight:700;color:var(–txt3);margin-bottom:2px}
+.sck-l{font-size:11px;font-weight:700;color:var(–txt);line-height:1.3}
+.sck.on .sck-l{color:var(–green)}
+.sim-r{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sr{background:var(–white);border-radius:8px;padding:12px;text-align:center;border:1px solid var(–border)}
+.sr-l{font-size:10.5px;color:var(–txt2);font-weight:600;margin-bottom:5px}
+.sr-v{font-size:20px;font-weight:800;font-family:monospace}
+.sr-d{font-size:10.5px;font-weight:600;margin-top:3px}
 
-/* ──────────────────────────────────
-PAGE SYSTEM
-────────────────────────────── */
-.page { display: none; }
-.page.active { display: block; }
+/* AI INSIGHT */
+.ai-ins{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1.5px solid #bfdbfe;border-radius:var(–r);padding:14px 18px}
+.ai-ins-h{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.ai-ins-h svg{width:16px;height:16px;color:var(–blue)}
+.ai-ins-t{font-size:13px;font-weight:800;color:var(–blue)}
+.ai-ins ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.ai-ins li{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(–txt);line-height:1.5}
+.ai-ins li::before{content:‘▶’;font-size:8px;color:var(–brand);margin-top:4px;flex-shrink:0}
 
-/* ──────────────────────────────────
-MODAL
-────────────────────────────────── */
-.modal-bg {
-display: none; position: fixed; inset: 0;
-background: rgba(0,0,0,.25); backdrop-filter: blur(2px);
-z-index: 200; align-items: center; justify-content: center;
-}
-.modal-bg.open { display: flex; }
-.modal-box {
-background: var(–white); border-radius: 14px;
-padding: 26px 28px; width: 500px; max-width: 95vw;
-box-shadow: var(–shadow-md), 0 0 0 1px var(–border);
-animation: pop .18s ease;
-}
-@keyframes pop { from { transform:scale(.96); opacity:0; } to { transform:scale(1); opacity:1; } }
-.modal-title { font-size: 16px; font-weight: 800; margin-bottom: 20px; }
-.form-row { margin-bottom: 14px; }
-.form-label { display: block; font-size: 11.5px; font-weight: 600; color: var(–txt2); margin-bottom: 5px; }
-.form-ctrl {
-width: 100%; padding: 9px 12px;
-background: var(–white); border: 1.5px solid var(–border);
-border-radius: var(–radius-sm); color: var(–txt); font-size: 13px;
-}
-.form-ctrl:focus { outline: none; border-color: var(–brand); }
-select.form-ctrl { appearance: none; background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ fill=‘none’ viewBox=‘0 0 24 24’ stroke=’%239ca3af’ stroke-width=‘2’%3E%3Cpath d=‘M19 9l-7 7-7-7’/%3E%3C/svg%3E”); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px; padding-right: 30px; }
-.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 22px; }
+/* ROADMAP */
+.roadmap{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(–border);border-radius:8px;overflow:hidden}
+.rm-col{padding:14px}
+.rm-col:not(:last-child){border-right:1px solid var(–border)}
+.rm-lbl{font-size:10px;font-weight:800;letter-spacing:.8px;margin-bottom:8px}
+.rm-items{display:flex;flex-direction:column;gap:5px}
+.rm-item{border-radius:5px;padding:6px 9px;font-size:11.5px;font-weight:600}
 
-/* ──────────────────────────────────
-TOAST
-────────────────────────────────── */
-#toast {
-position: fixed; bottom: 22px; right: 22px; z-index: 999;
-background: var(–txt); color: #fff;
-padding: 12px 18px; border-radius: 9px; font-size: 13px; font-weight: 500;
-display: flex; align-items: center; gap: 10px;
-box-shadow: var(–shadow-md);
-transform: translateY(16px); opacity: 0;
-transition: all .25s cubic-bezier(.34,1.56,.64,1);
-pointer-events: none;
-}
-#toast.show { transform: translateY(0); opacity: 1; }
-#toast.t-ok   { background: var(–green); }
-#toast.t-warn { background: var(–yellow); }
-#toast.t-err  { background: var(–red); }
-#toast svg { width: 16px; height: 16px; }
-
-/* ──────────────────────────────────
-MISC UTILITIES
-────────────────────────────────── */
-.flex { display: flex; }
-.ai-c { align-items: center; }
-.jc-sb { justify-content: space-between; }
-.gap-2 { gap: 8px; }
-.gap-3 { gap: 12px; }
-.ml-a  { margin-left: auto; }
-.mt12  { margin-top: 12px; }
-.mt16  { margin-top: 16px; }
-.fw-7  { font-weight: 700; }
-.fw-8  { font-weight: 800; }
-.fs-12 { font-size: 12px; }
-.fs-11 { font-size: 11px; }
-.c-txt2{ color: var(–txt2); }
-.c-txt3{ color: var(–txt3); }
-.c-brand { color: var(–brand); }
-.c-green { color: var(–green); }
-.c-red   { color: var(–red); }
-.c-blue  { color: var(–blue); }
-.mono    { font-family: ‘SF Mono’,‘Consolas’,monospace; }
-.tr      { text-align: right; }
-
-/* CANVAS */
-canvas { display: block; max-width: 100%; }
-
-/* Gauge ring mini */
-.mini-ring { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.ring-val  { font-size: 17px; font-weight: 800; letter-spacing: -0.5px; }
-.ring-lbl  { font-size: 10px; color: var(–txt3); font-weight: 500; }
-
-/* Icon box */
-.ib { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.ib svg { width: 16px; height: 16px; }
-.ib-brand { background:var(–brand-lt); color:var(–brand); }
-.ib-blue  { background:var(–blue-lt);  color:var(–blue); }
-.ib-green { background:var(–green-lt); color:var(–green); }
-.ib-red   { background:var(–red-lt);   color:var(–red); }
-.ib-yellow{ background:var(–yellow-lt);color:var(–yellow); }
-.ib-purple{ background:var(–purple-lt);color:var(–purple); }
-
-/* Row util in card */
-.info-row { display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(–border); }
-.info-row:last-child { border-bottom:none; }
-.info-key { font-size:12.5px; color:var(–txt2); }
-.info-val { font-size:13px; font-weight:700; color:var(–txt); }
+/* UTILS */
+.flex{display:flex}.aic{align-items:center}.jsb{justify-content:space-between}
+.gap2{gap:8px}.gap3{gap:12px}.mla{margin-left:auto}
+.fw7{font-weight:700}.fw8{font-weight:800}
+.fs12{font-size:12px}.fs11{font-size:11px}.fs10{font-size:10px}
+.c2{color:var(–txt2)}.c3{color:var(–txt3)}
+.cg{color:var(–green)}.cr{color:var(–red)}.cb{color:var(–blue)}.cy{color:var(–yellow)}.cn{color:var(–brand)}.cp{color:var(–purple)}
+canvas{display:block;max-width:100%}
 </style>
 
 </head>
 <body>
 
-<!-- ═════════════ SIDEBAR ═════════════ -->
+<!-- SIDEBAR -->
 
-<div id="sidebar">
-  <div class="logo-area">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-    </div>
-    <div class="logo-text">
-      <div class="logo-name">COLDCUT ERP</div>
-      <div class="logo-sub">냉동육 가공 통합관리 v2.4</div>
-    </div>
+<div id="sb">
+  <div class="logo">
+    <div class="logo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+    <div><div class="logo-name">COLDCUT ERP</div><div class="logo-sub">냉동육 가공 통합관리 v2.4</div></div>
   </div>
-
   <nav>
-    <div class="nav-group">
-      <div class="nav-group-label">대시보드</div>
-      <div class="nav-item active" onclick="goto('dashboard')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        대시보드
-      </div>
-    </div>
-
-```
-<div class="nav-group">
-  <div class="nav-group-label">수입 · 원자재</div>
-  <div class="nav-item" onclick="goto('import')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-    수입 관리
-    <span class="nav-badge">3</span>
-  </div>
-  <div class="nav-item" onclick="goto('rawstock')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/></svg>
-    원자재 재고
-  </div>
-</div>
-
-<div class="nav-group">
-  <div class="nav-group-label">생산 · 가공</div>
-  <div class="nav-item" onclick="goto('production')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
-    생산 · 절단 관리
-    <span class="nav-badge">2</span>
-  </div>
-  <div class="nav-item" onclick="goto('packaging')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
-    포장 관리
-  </div>
-</div>
-
-<div class="nav-group">
-  <div class="nav-group-label">영업 · 출하</div>
-  <div class="nav-item" onclick="goto('sales')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-    수주 · 판매
-  </div>
-  <div class="nav-item" onclick="goto('shipment')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-    출하 · 배송
-  </div>
-  <div class="nav-item" onclick="goto('finstock')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-    완제품 재고
-  </div>
-</div>
-
-<div class="nav-group">
-  <div class="nav-group-label">품질 · 관리</div>
-  <div class="nav-item" onclick="goto('quality')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    품질 관리
-  </div>
-  <div class="nav-item" onclick="goto('suppliers')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-    거래처 관리
-  </div>
-  <div class="nav-item" onclick="goto('reports')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-    경영 리포트
-  </div>
-</div>
-```
-
+    <div class="ng-lbl">대시보드</div>
+    <div class="ni active" onclick="G('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>대시보드</div>
+    <div class="ng-lbl">🤖 AI 분석</div>
+    <div class="ni" onclick="G('ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>회전율 가속 AI<span class="ai-nb">AI</span></div>
+    <div class="ng-lbl">수입 · 원자재</div>
+    <div class="ni" onclick="G('import')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>수입 관리<span class="nb">3</span></div>
+    <div class="ni" onclick="G('rawstock')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/></svg>원자재 재고</div>
+    <div class="ng-lbl">생산 · 가공</div>
+    <div class="ni" onclick="G('production')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>생산 · 절단<span class="nb">2</span></div>
+    <div class="ni" onclick="G('packaging')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>포장 관리</div>
+    <div class="ng-lbl">영업 · 출하</div>
+    <div class="ni" onclick="G('sales')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>수주 · 판매</div>
+    <div class="ni" onclick="G('shipment')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>출하 · 배송</div>
+    <div class="ni" onclick="G('finstock')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>완제품 재고</div>
+    <div class="ng-lbl">품질 · 관리</div>
+    <div class="ni" onclick="G('quality')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>품질 관리</div>
+    <div class="ni" onclick="G('suppliers')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>거래처 관리</div>
+    <div class="ni" onclick="G('reports')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>경영 리포트</div>
   </nav>
-
-  <div class="sidebar-user">
-    <div class="avatar">김</div>
-    <div>
-      <div class="user-name">김관리 과장</div>
-      <div class="user-role">생산관리팀 · 관리자</div>
-    </div>
-  </div>
+  <div class="sb-user"><div class="av">김</div><div><div class="un">김관리 과장</div><div class="ur">생산관리팀 · 관리자</div></div></div>
 </div>
 
-<!-- ═════════════ MAIN ═════════════ -->
+<!-- MAIN -->
 
 <div id="main">
-  <!-- TOPBAR -->
   <div class="topbar">
-    <span class="topbar-title" id="tb-title">대시보드</span>
-    <span class="topbar-sep">›</span>
-    <span class="topbar-bread" id="tb-bread">홈 / 대시보드</span>
-    <div class="topbar-right">
-      <div class="topbar-time" id="tb-time"></div>
-      <button class="btn btn-secondary btn-sm" onclick="toast('데이터가 새로고침 되었습니다.','ok')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-        새로고침
-      </button>
-      <button class="btn btn-primary btn-sm" onclick="openOrderModal()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        신규 수주
-      </button>
+    <span class="tb-title" id="tbt">대시보드</span>
+    <span class="tb-sep">›</span>
+    <span class="tb-bread" id="tbb">홈 / 대시보드</span>
+    <div class="tb-r">
+      <div class="tb-time" id="tbt2"></div>
+      <button class="btn btn-s btn-sm" onclick="T('새로고침 완료','ok')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>새로고침</button>
+      <button class="btn btn-p btn-sm" onclick="openM()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>신규 수주</button>
     </div>
   </div>
-
-  <!-- CONTENT -->
 
   <div id="content">
 
-```
-<!-- ══════════ DASHBOARD ══════════ -->
-<div id="page-dashboard" class="page active">
+<!-- ═══ DASHBOARD ═══ -->
 
-  <div class="notice notice-warn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    <span><b>주의:</b> 냉동창고 A동 온도 이상 감지 (현재 -12°C / 설정 -18°C) — 엔지니어 즉시 확인 필요</span>
-    <button class="btn btn-secondary btn-sm" style="margin-left:auto;flex-shrink:0" onclick="toast('알림이 엔지니어에게 전달되었습니다.','ok')">조치하기</button>
+<div id="p-dashboard" class="page active">
+  <div class="notice nw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span><b>주의:</b> 냉동창고 A동 온도 이상 감지 (현재 -12°C / 설정 -18°C)</span><button class="btn btn-s btn-sm" style="margin-left:auto;flex-shrink:0" onclick="T('엔지니어에게 전달되었습니다.','ok')">조치하기</button></div>
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">오늘 절단 완료</div><div class="kv cg">24,850<span>kg</span></div><div class="kf"><span class="kc-up">▲ 8.3%</span><span class="ks">어제 대비</span></div></div>
+    <div class="card kc"><div class="kl">이번달 수입량</div><div class="kv cb">312.4<span>톤</span></div><div class="kf"><span class="kc-up">▲ 5.1%</span><span class="ks">전월 대비</span></div></div>
+    <div class="card kc"><div class="kl">이번달 출하 매출</div><div class="kv cn">4.82<span>억원</span></div><div class="kf"><span class="kc-up">▲ 12.7%</span><span class="ks">전월 대비</span></div></div>
+    <div class="card kc"><div class="kl">재고 부족 품목</div><div class="kv cr">3<span>품목</span></div><div class="kf"><span class="kc-dn">안전재고 미달</span></div></div>
   </div>
-
-  <!-- KPI ROW -->
-  <div class="grid g4 mb16">
-    <div class="card kpi-card">
-      <div class="kpi-header">
-        <div>
-          <div class="kpi-label">오늘 절단 완료</div>
-          <div class="kpi-value">24,850<span>kg</span></div>
-        </div>
-        <div class="kpi-icon ib-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-      </div>
-      <div class="kpi-footer">
-        <span class="kpi-change kpi-up">▲ 8.3%</span>
-        <span class="kpi-sub-label">어제 대비</span>
-      </div>
-    </div>
-    <div class="card kpi-card">
-      <div class="kpi-header">
-        <div>
-          <div class="kpi-label">이번달 수입량</div>
-          <div class="kpi-value">312.4<span>톤</span></div>
-        </div>
-        <div class="kpi-icon ib-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-      </div>
-      <div class="kpi-footer">
-        <span class="kpi-change kpi-up">▲ 5.1%</span>
-        <span class="kpi-sub-label">전월 대비</span>
-      </div>
-    </div>
-    <div class="card kpi-card">
-      <div class="kpi-header">
-        <div>
-          <div class="kpi-label">이번달 출하 매출</div>
-          <div class="kpi-value">4.82<span>억원</span></div>
-        </div>
-        <div class="kpi-icon ib-brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-      </div>
-      <div class="kpi-footer">
-        <span class="kpi-change kpi-up">▲ 12.7%</span>
-        <span class="kpi-sub-label">전월 대비</span>
-      </div>
-    </div>
-    <div class="card kpi-card">
-      <div class="kpi-header">
-        <div>
-          <div class="kpi-label">재고 부족 품목</div>
-          <div class="kpi-value c-red">3<span>품목</span></div>
-        </div>
-        <div class="kpi-icon ib-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-      </div>
-      <div class="kpi-footer">
-        <span class="kpi-change kpi-down">안전재고 미달</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- CHARTS ROW -->
-  <div class="grid g-6-4 mb16">
+  <div class="g g64 mb">
+    <div class="card"><div class="ch"><div class="ct"><div class="cti" style="background:var(--blue-lt);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>월별 생산·출하 현황 (2025)</div><span class="fs10 c3">단위: 톤</span></div><canvas id="c-monthly" height="200"></canvas></div>
     <div class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <div class="card-title-icon ib-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
-          월별 생산 · 출하 현황 (2025)
-        </div>
-        <span class="fs-11 c-txt3">단위: 톤</span>
-      </div>
-      <canvas id="c-monthly" height="200"></canvas>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <div class="card-title-icon ib-brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/></svg></div>
-          제품별 재고 구성
-        </div>
-      </div>
-      <canvas id="c-donut" height="140"></canvas>
-      <hr class="divider" style="margin:12px 0 10px">
-      <ul class="stat-list">
-        <li class="stat-item"><span class="stat-dot" style="background:#f97316"></span><span class="stat-label">삼겹살 200g</span><span class="stat-val">8,420 kg</span><span class="stat-pct">31%</span></li>
-        <li class="stat-item"><span class="stat-dot" style="background:#3b82f6"></span><span class="stat-label">목살 300g</span><span class="stat-val">6,180 kg</span><span class="stat-pct">23%</span></li>
-        <li class="stat-item"><span class="stat-dot" style="background:#16a34a"></span><span class="stat-label">앞다리살 500g</span><span class="stat-val">5,650 kg</span><span class="stat-pct">21%</span></li>
-        <li class="stat-item"><span class="stat-dot" style="background:#7c3aed"></span><span class="stat-label">등심 250g</span><span class="stat-val">4,230 kg</span><span class="stat-pct">16%</span></li>
-        <li class="stat-item"><span class="stat-dot" style="background:#9ca3af"></span><span class="stat-label">기타</span><span class="stat-val">2,520 kg</span><span class="stat-pct">9%</span></li>
+      <div class="ch"><div class="ct"><div class="cti" style="background:var(--brand-lt);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div>제품별 재고 구성</div></div>
+      <canvas id="c-donut" height="130"></canvas>
+      <hr>
+      <ul class="sl">
+        <li class="si"><span class="sd" style="background:#f97316"></span><span class="sl-l">삼겹살 200g</span><span class="sl-v">8,420 kg</span><span class="sl-p">31%</span></li>
+        <li class="si"><span class="sd" style="background:#3b82f6"></span><span class="sl-l">목살 300g</span><span class="sl-v">6,180 kg</span><span class="sl-p">23%</span></li>
+        <li class="si"><span class="sd" style="background:#16a34a"></span><span class="sl-l">앞다리살 500g</span><span class="sl-v">5,650 kg</span><span class="sl-p">21%</span></li>
+        <li class="si"><span class="sd" style="background:#7c3aed"></span><span class="sl-l">등심 250g</span><span class="sl-v">4,230 kg</span><span class="sl-p">16%</span></li>
       </ul>
     </div>
   </div>
-
-  <!-- BOTTOM 3 -->
-  <div class="grid g3">
-    <!-- 작업 현황 -->
+  <div class="g g3">
     <div class="card">
-      <div class="card-header">
-        <div class="card-title">오늘 절단 작업</div>
-        <span class="badge b-green">진행중</span>
+      <div class="ch"><div class="ct">오늘 절단 작업</div><span class="badge bg">진행중</span></div>
+      <div class="g g2" style="gap:9px;margin-bottom:12px">
+        <div style="background:var(--green-lt);border-radius:8px;padding:12px;text-align:center;border:1px solid #bbf7d0"><div class="fs11 c2 fw7" style="margin-bottom:3px">완료</div><div style="font-size:26px;font-weight:800;color:var(--green)">14</div><div class="fs11 c3">작업지시</div></div>
+        <div style="background:var(--yellow-lt);border-radius:8px;padding:12px;text-align:center;border:1px solid #fde68a"><div class="fs11 c2 fw7" style="margin-bottom:3px">진행중</div><div style="font-size:26px;font-weight:800;color:var(--yellow)">3</div><div class="fs11 c3">작업지시</div></div>
       </div>
-      <div class="grid g2" style="gap:10px;margin-bottom:14px">
-        <div style="background:var(--green-lt);border-radius:8px;padding:14px;text-align:center;border:1px solid #bbf7d0">
-          <div class="fs-11 c-txt2 fw-7" style="margin-bottom:4px">완료</div>
-          <div style="font-size:28px;font-weight:800;color:var(--green)">14</div>
-          <div class="fs-11 c-txt3">작업지시</div>
-        </div>
-        <div style="background:var(--yellow-lt);border-radius:8px;padding:14px;text-align:center;border:1px solid #fde68a">
-          <div class="fs-11 c-txt2 fw-7" style="margin-bottom:4px">진행중</div>
-          <div style="font-size:28px;font-weight:800;color:var(--yellow)">3</div>
-          <div class="fs-11 c-txt3">작업지시</div>
-        </div>
-      </div>
-      <div style="margin-bottom:6px"><div class="prog"><div class="prog-fill" style="width:82%;background:var(--green)"></div></div></div>
-      <div class="fs-11 c-txt3 tr">목표 대비 82% 달성</div>
-      <hr class="divider">
-      <ul class="stat-list">
-        <li class="stat-item"><span class="stat-label">창고 A동 온도</span><span class="temp temp-warn">-12°C ⚠</span></li>
-        <li class="stat-item"><span class="stat-label">창고 B동 온도</span><span class="temp temp-ok">-18°C ✓</span></li>
-        <li class="stat-item"><span class="stat-label">작업실 온도</span><span class="temp temp-ok">+5°C ✓</span></li>
+      <div class="prog mb" style="margin-bottom:5px"><div class="pf" style="width:82%;background:var(--green)"></div></div>
+      <div class="fs11 c3" style="text-align:right">목표 대비 82% 달성</div>
+      <hr>
+      <ul class="sl">
+        <li class="si"><span class="sl-l">창고 A동 온도</span><span class="temp twn">-12°C ⚠</span></li>
+        <li class="si"><span class="sl-l">창고 B동 온도</span><span class="temp tok">-18°C ✓</span></li>
+        <li class="si"><span class="sl-l">작업실 온도</span><span class="temp tok">+5°C ✓</span></li>
       </ul>
     </div>
-
-    <!-- 최근 수주 -->
     <div class="card">
-      <div class="card-header">
-        <div class="card-title">오늘 수주 현황</div>
-        <span class="badge b-brand">5건</span>
-      </div>
+      <div class="ch"><div class="ct">오늘 수주 현황</div><span class="badge bn">5건</span></div>
       <ul class="tl">
-        <li class="tl-item"><div class="tl-dot" style="background:var(--green)"></div><div><div class="tl-time">14:32</div><div class="tl-text"><b>CU편의점</b> — 삼겹살 200g × 2,000팩</div></div></li>
-        <li class="tl-item"><div class="tl-dot" style="background:var(--blue)"></div><div><div class="tl-time">13:15</div><div class="tl-text"><b>이마트 물류</b> — 목살 300g × 1,500팩</div></div></li>
-        <li class="tl-item"><div class="tl-dot" style="background:var(--brand)"></div><div><div class="tl-time">11:40</div><div class="tl-text"><b>한국마트</b> — 앞다리살 500g × 800팩</div></div></li>
-        <li class="tl-item"><div class="tl-dot" style="background:var(--purple)"></div><div><div class="tl-time">10:05</div><div class="tl-text"><b>롯데마트 물류</b> — 삼겹살 200g × 3,000팩</div></div></li>
-        <li class="tl-item"><div class="tl-dot" style="background:var(--cyan)"></div><div><div class="tl-time">09:20</div><div class="tl-text"><b>GS리테일</b> — 등심 250g × 1,200팩</div></div></li>
+        <li><div class="tl-dot" style="background:var(--green)"></div><div><div class="tl-t">14:32</div><div class="tl-x"><b>CU편의점</b> — 삼겹살 200g × 2,000팩</div></div></li>
+        <li><div class="tl-dot" style="background:var(--blue)"></div><div><div class="tl-t">13:15</div><div class="tl-x"><b>이마트 물류</b> — 목살 300g × 1,500팩</div></div></li>
+        <li><div class="tl-dot" style="background:var(--brand)"></div><div><div class="tl-t">11:40</div><div class="tl-x"><b>한국마트</b> — 앞다리살 500g × 800팩</div></div></li>
+        <li><div class="tl-dot" style="background:var(--purple)"></div><div><div class="tl-t">10:05</div><div class="tl-x"><b>롯데마트</b> — 삼겹살 200g × 3,000팩</div></div></li>
+        <li><div class="tl-dot" style="background:var(--cyan)"></div><div><div class="tl-t">09:20</div><div class="tl-x"><b>GS리테일</b> — 등심 250g × 1,200팩</div></div></li>
       </ul>
     </div>
-
-    <!-- 알림 -->
     <div class="card">
-      <div class="card-header">
-        <div class="card-title">알림 · 긴급 사항</div>
-        <span class="badge b-red">5건</span>
-      </div>
-      <div class="notice notice-err" style="margin-bottom:8px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        냉동창고 A동 온도 이상 (-12°C)
-      </div>
-      <div class="notice notice-warn" style="margin-bottom:8px">LOT-2025-0612 통관 서류 미비 — 검토 필요</div>
-      <div class="notice notice-warn" style="margin-bottom:8px">등심 완제품 재고 안전수량 이하 (잔량 850kg)</div>
-      <div class="notice notice-warn" style="margin-bottom:8px">GS리테일 납기 D-2 (07/08 출하 예정)</div>
-      <div class="notice notice-ok" style="margin-bottom:0">LOT-2025-0608 스페인산 삼겹살 통관 완료 ✓</div>
+      <div class="ch"><div class="ct">알림 · 긴급 사항</div><span class="badge br">5건</span></div>
+      <div class="notice ne" style="margin-bottom:7px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>냉동창고 A동 온도 이상 (-12°C)</div>
+      <div class="notice nw" style="margin-bottom:7px">LOT-2025-0612 통관 서류 미비 — 검토 필요</div>
+      <div class="notice nw" style="margin-bottom:7px">등심 완제품 재고 안전수량 이하 (잔량 850kg)</div>
+      <div class="notice nw" style="margin-bottom:7px">GS리테일 납기 D-2 (07/08 출하 예정)</div>
+      <div class="notice nok" style="margin-bottom:0">LOT-2025-0608 스페인산 삼겹살 통관 완료 ✓</div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 수입 관리 ══════════ -->
-<div id="page-import" class="page">
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab(this)">수입 주문 현황</div>
-    <div class="tab" onclick="switchTab(this)">통관 진행</div>
-    <div class="tab" onclick="switchTab(this)">수입 이력</div>
-  </div>
+<!-- ═══ AI 회전율 가속 모듈 ═══ -->
 
-  <div class="flex ai-c gap-2 mb16">
-    <button class="btn btn-primary btn-sm" onclick="toast('수입 발주서가 생성되었습니다.','ok')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>수입 발주
-    </button>
-    <button class="btn btn-secondary btn-sm" onclick="toast('엑셀로 내보냈습니다.','ok')">📥 엑셀 내보내기</button>
-    <div class="ml-a flex gap-2">
-      <select class="form-ctrl" style="width:130px;padding:5px 10px;font-size:12px"><option>전체 원산지</option><option>스페인</option><option>독일</option><option>덴마크</option><option>캐나다</option></select>
-      <select class="form-ctrl" style="width:110px;padding:5px 10px;font-size:12px"><option>전체 상태</option><option>통관중</option><option>완료</option><option>운송중</option></select>
+<div id="p-ai" class="page">
+  <!-- 헤더 -->
+  <div class="ai-hdr">
+    <div class="ai-hi">
+      <div class="ai-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>COLDCUT AI ENGINE v2.4 · 실시간 분석</div>
+      <div class="ai-title">🚀 회전율 가속 AI 모듈</div>
+      <div class="ai-desc">재고·매출채권·매입채무 회전율을 종합 분석하여 현금전환주기(CCC)를 단축합니다.<br>AI가 도출한 5가지 시나리오를 통해 연간 현금흐름 <b style="color:#fbbf24">+7.5억원</b> 개선이 가능합니다.</div>
+      <div class="ai-chips">
+        <div class="ai-chip">현재 CCC <b>38일</b></div>
+        <div class="ai-chip">목표 CCC <b>21일</b></div>
+        <div class="ai-chip">개선 가능 현금 <b>+7.5억원</b></div>
+        <div class="ai-chip">분석 기준 <b>2025.06.18</b></div>
+      </div>
     </div>
   </div>
 
-  <div class="card mb16">
-    <div class="table-wrap">
+  <!-- KPI 6개 -->
+
+  <div class="g mb" style="grid-template-columns:repeat(6,1fr);gap:10px;display:grid">
+    <div class="card kc" style="padding:13px 15px"><div class="kl" style="font-size:10px">현금전환주기 (CCC)</div><div class="kv cr" style="font-size:20px">38<span>일</span></div><div class="kf"><span class="kc-dn">업계평균 28일</span></div></div>
+    <div class="card kc" style="padding:13px 15px"><div class="kl" style="font-size:10px">재고보유일수 (DIO)</div><div class="kv cy" style="font-size:20px">24<span>일</span></div><div class="kf"><span class="kc-dn">목표 16일</span></div></div>
+    <div class="card kc" style="padding:13px 15px"><div class="kl" style="font-size:10px">채권회수일수 (DSO)</div><div class="kv cy" style="font-size:20px">22<span>일</span></div><div class="kf"><span class="kc-dn">목표 14일</span></div></div>
+    <div class="card kc" style="padding:13px 15px"><div class="kl" style="font-size:10px">채무지급일수 (DPO)</div><div class="kv cr" style="font-size:20px">8<span>일</span></div><div class="kf"><span class="kc-dn">목표 18일</span></div></div>
+    <div class="card kc" style="padding:13px 15px"><div class="kl" style="font-size:10px">재고회전율</div><div class="kv cb" style="font-size:20px">15.2<span>회</span></div><div class="kf"><span class="kc-up">연간 기준</span></div></div>
+    <div class="card kc" style="padding:13px 15px"><div class="kl" style="font-size:10px">완제품회전율</div><div class="kv cg" style="font-size:20px">18.4<span>회</span></div><div class="kf"><span class="kc-up">목표 22회</span></div></div>
+  </div>
+
+  <!-- CCC 분해 + 레이더 -->
+
+  <div class="g g64 mb">
+    <div class="card">
+      <div class="ch"><div class="ct"><div class="cti" style="background:var(--red-lt);color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>현금전환주기 (CCC) 구조 분해</div><span class="badge br">DSO + DIO − DPO</span></div>
+      <div class="ccc-wf">
+        <div class="ccc-blk" style="background:#eff6ff"><div class="ccc-v cb">22일</div><div class="ccc-l cb">DSO</div><div class="ccc-s">매출채권<br>회수일수</div></div>
+        <div class="ccc-arr">+</div>
+        <div class="ccc-blk" style="background:#fffbeb"><div class="ccc-v cy">24일</div><div class="ccc-l cy">DIO</div><div class="ccc-s">재고<br>보유일수</div></div>
+        <div class="ccc-arr">−</div>
+        <div class="ccc-blk" style="background:#fef2f2"><div class="ccc-v cr">8일</div><div class="ccc-l cr">DPO</div><div class="ccc-s">매입채무<br>지급일수</div></div>
+        <div class="ccc-arr">=</div>
+        <div class="ccc-res"><div class="ccc-v">38일</div><div class="ccc-l">CCC</div><div class="ccc-s" style="color:rgba(255,255,255,.5)">현금전환주기</div></div>
+      </div>
+      <canvas id="c-ccc" height="160"></canvas>
+      <div class="g g3 mt" style="gap:8px">
+        <div style="background:var(--blue-lt);border-radius:6px;padding:8px 10px;text-align:center;border:1px solid #bfdbfe"><div style="font-size:9.5px;font-weight:700;color:var(--blue);margin-bottom:2px">매출채권회전율</div><div style="font-size:15px;font-weight:800;font-family:monospace;color:var(--blue)">16.6회</div><div style="font-size:9.5px;color:var(--txt3)">목표 26회</div></div>
+        <div style="background:var(--yellow-lt);border-radius:6px;padding:8px 10px;text-align:center;border:1px solid #fde68a"><div style="font-size:9.5px;font-weight:700;color:var(--yellow);margin-bottom:2px">원자재회전율</div><div style="font-size:15px;font-weight:800;font-family:monospace;color:var(--yellow)">12.8회</div><div style="font-size:9.5px;color:var(--txt3)">목표 18회</div></div>
+        <div style="background:var(--red-lt);border-radius:6px;padding:8px 10px;text-align:center;border:1px solid #fecaca"><div style="font-size:9.5px;font-weight:700;color:var(--red);margin-bottom:2px">매입채무회전율</div><div style="font-size:15px;font-weight:800;font-family:monospace;color:var(--red)">45.6회</div><div style="font-size:9.5px;color:var(--txt3)">너무 빠름 ⚠</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct"><div class="cti" style="background:var(--purple-lt);color:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg></div>회전율 종합 진단</div></div>
+      <canvas id="c-radar" height="190"></canvas>
+      <hr>
+      <div class="ai-ins" style="background:linear-gradient(135deg,#fef9c3,#fef3c7);border-color:#fde68a">
+        <div class="ai-ins-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--yellow)"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="ai-ins-t" style="color:var(--yellow)">AI 핵심 진단</span></div>
+        <ul>
+          <li>DPO <b>8일</b>은 업계 최저 — 공급사 결제조건 재협상 즉시 필요</li>
+          <li>등심·앞다리살 재고 체류 <b>32일+</b> — 과잉 수입 패턴 확인</li>
+          <li>대형마트 DSO <b>28~35일</b> — 조기결제 할인 프로그램 효과 높음</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 품목별 회전율 테이블 -->
+
+  <div class="card mb">
+    <div class="ch"><div class="ct"><div class="cti" style="background:var(--brand-lt);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>품목별 재고회전율 상세 분석</div><span class="fs10 c3">기준: 최근 90일 · 단위: 회/년</span></div>
+    <div class="tw">
       <table>
-        <thead><tr><th>발주번호</th><th>공급업체</th><th>원산지</th><th>품목</th><th>발주중량</th><th>단가($/kg)</th><th>발주금액</th><th>선적일</th><th>예상입고</th><th>상태</th><th>담당자</th></tr></thead>
+        <thead><tr><th>품목</th><th>규격</th><th>평균재고</th><th>월매출원가</th><th>재고회전율</th><th>재고보유일수</th><th>업계평균DIO</th><th>괴리</th><th>과잉재고</th><th>AI 우선순위</th><th>상태</th></tr></thead>
         <tbody>
-          <tr><td><span class="lot-tag">IMP-2025-0618</span></td><td class="fw-7">Iberian Pork Co.</td><td><span class="badge b-blue">스페인</span></td><td>삼겹살 (벨리)</td><td class="td-mono">28,500 kg</td><td class="td-mono">$3.85</td><td class="td-mono fw-7 c-brand">$109,725</td><td>2025.06.10</td><td>2025.07.05</td><td><span class="badge b-yellow">통관중</span></td><td>박수입</td></tr>
-          <tr><td><span class="lot-tag">IMP-2025-0614</span></td><td class="fw-7">Nordic Meat GmbH</td><td><span class="badge b-cyan">독일</span></td><td>목살 (숄더)</td><td class="td-mono">42,000 kg</td><td class="td-mono">$3.20</td><td class="td-mono fw-7 c-brand">$134,400</td><td>2025.05.28</td><td>2025.06.22</td><td><span class="badge b-yellow">운송중</span></td><td>박수입</td></tr>
-          <tr><td><span class="lot-tag">IMP-2025-0608</span></td><td class="fw-7">Iberian Pork Co.</td><td><span class="badge b-blue">스페인</span></td><td>삼겹살 (벨리)</td><td class="td-mono">35,000 kg</td><td class="td-mono">$3.80</td><td class="td-mono fw-7 c-brand">$133,000</td><td>2025.05.20</td><td>2025.06.14</td><td><span class="badge b-green">통관완료</span></td><td>박수입</td></tr>
-          <tr><td><span class="lot-tag">IMP-2025-0601</span></td><td class="fw-7">Danish Crown A/S</td><td><span class="badge b-purple">덴마크</span></td><td>앞다리살 (픽닉)</td><td class="td-mono">50,000 kg</td><td class="td-mono">$2.95</td><td class="td-mono fw-7 c-brand">$147,500</td><td>2025.05.12</td><td>2025.06.08</td><td><span class="badge b-green">입고완료</span></td><td>이통관</td></tr>
-          <tr><td><span class="lot-tag">IMP-2025-0595</span></td><td class="fw-7">Canada Pork Int'l</td><td><span class="badge b-gray">캐나다</span></td><td>등심 (로인)</td><td class="td-mono">18,000 kg</td><td class="td-mono">$4.50</td><td class="td-mono fw-7 c-brand">$81,000</td><td>2025.04.30</td><td>2025.05.28</td><td><span class="badge b-green">입고완료</span></td><td>이통관</td></tr>
-          <tr><td><span class="lot-tag">IMP-2025-0620</span></td><td class="fw-7">Danish Crown A/S</td><td><span class="badge b-purple">덴마크</span></td><td>목살 (숄더)</td><td class="td-mono">30,000 kg</td><td class="td-mono">$3.15</td><td class="td-mono fw-7 c-brand">$94,500</td><td>2025.06.18</td><td>2025.07.12</td><td><span class="badge b-blue">발주완료</span></td><td>박수입</td></tr>
+          <tr><td class="fw7">냉동 삼겹살</td><td>200g</td><td class="mono">12,450 kg</td><td class="mono">₩34.8M</td><td class="mono fw7 cg">22.3회</td><td class="mono cg">16일</td><td class="mono">18일</td><td><span style="color:var(--green);font-size:11px;font-weight:700">▲ +2일 여유</span></td><td class="mono">—</td><td><span class="badge bg">낮음</span></td><td><span class="badge bg">정상</span></td></tr>
+          <tr><td class="fw7">냉동 목살</td><td>300g</td><td class="mono">8,230 kg</td><td class="mono">₩26.3M</td><td class="mono fw7 cy">16.8회</td><td class="mono cy">22일</td><td class="mono">18일</td><td><span style="color:var(--red);font-size:11px;font-weight:700">▼ -4일 초과</span></td><td class="mono cy">548만원</td><td><span class="badge by">보통</span></td><td><span class="badge by">주의</span></td></tr>
+          <tr><td class="fw7">냉동 앞다리살</td><td>500g</td><td class="mono">5,650 kg</td><td class="mono">₩14.1M</td><td class="mono fw7 cr">12.1회</td><td class="mono cr">30일</td><td class="mono">18일</td><td><span style="color:var(--red);font-size:11px;font-weight:700">▼ -12일 초과</span></td><td class="mono cr">1,410만원</td><td><span class="badge br">높음</span></td><td><span class="badge br">과잉</span></td></tr>
+          <tr><td class="fw7">냉동 등심</td><td>250g</td><td class="mono">850 kg</td><td class="mono">₩3.2M</td><td class="mono fw7 cr">8.4회</td><td class="mono cr">43일</td><td class="mono">18일</td><td><span style="color:var(--red);font-size:11px;font-weight:700">▼ -25일 초과</span></td><td class="mono cr">890만원</td><td><span class="badge br">매우높음</span></td><td><span class="badge br">부족+지연</span></td></tr>
+          <tr><td class="fw7">냉동 삼겹살</td><td>1kg대용량</td><td class="mono">1,820 kg</td><td class="mono">₩5.5M</td><td class="mono fw7 cy">15.8회</td><td class="mono cy">23일</td><td class="mono">18일</td><td><span style="color:var(--red);font-size:11px;font-weight:700">▼ -5일 초과</span></td><td class="mono cy">458만원</td><td><span class="badge by">보통</span></td><td><span class="badge by">주의</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <div class="grid g3">
-    <div class="card">
-      <div class="card-header"><div class="card-title">원산지별 수입 비중</div></div>
-      <canvas id="c-origin" height="170"></canvas>
+  <!-- 5가지 시나리오 -->
+
+  <div class="flex aic jsb" style="margin-bottom:12px">
+    <div style="font-size:14.5px;font-weight:800;display:flex;align-items:center;gap:8px">
+      <div style="width:26px;height:26px;background:linear-gradient(135deg,#f97316,#7c3aed);border-radius:7px;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      AI 추천 5가지 개선 시나리오
     </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">이번달 수입 통계</div></div>
-      <ul class="stat-list">
-        <li class="stat-item"><span class="stat-label">총 발주 건수</span><span class="stat-val">6건</span></li>
-        <li class="stat-item"><span class="stat-label">총 발주 중량</span><span class="stat-val c-blue">203.5 톤</span></li>
-        <li class="stat-item"><span class="stat-label">총 발주 금액</span><span class="stat-val c-brand">$700,125</span></li>
-        <li class="stat-item"><span class="stat-label">통관 완료</span><span class="stat-val c-green">2건</span></li>
-        <li class="stat-item"><span class="stat-label">진행중</span><span class="stat-val" style="color:var(--yellow)">3건</span></li>
-        <li class="stat-item"><span class="stat-label">평균 단가</span><span class="stat-val">$3.44/kg</span></li>
-      </ul>
+    <span class="fs11 c3">클릭하여 시뮬레이터에 반영</span>
+  </div>
+
+  <div class="sc-grid">
+    <div class="sc-card on" id="sc1" onclick="togSc(1)">
+      <div class="sc-num">S1</div>
+      <div class="sc-t">📦 AI 수요예측 기반 재고 최적화</div>
+      <div class="sc-d">ML 수요예측 모델을 적용해 안전재고를 과학적으로 재설정합니다. 경험 기반 발주에서 데이터 기반으로 전환합니다.</div>
+      <div class="sc-m"><div class="sm"><div class="sm-l">DIO</div><div class="sm-b">24일</div><div class="sm-a cg">16일</div></div><div class="sm"><div class="sm-l">재고회전율</div><div class="sm-b">15.2회</div><div class="sm-a cg">22.8회</div></div><div class="sm"><div class="sm-l">과잉재고</div><div class="sm-b">3,306만</div><div class="sm-a cg">820만</div></div></div>
+      <div class="sc-imp"><span class="si-l">💰 연간 현금흐름 개선</span><span class="si-v">+2.1억원</span></div>
+      <div class="sc-tags"><span class="stag sm2">실행기간 3개월</span><span class="stag sm2">중간 난이도</span><span class="stag" style="background:var(--blue-lt);color:var(--blue)">AI 모델 구축</span></div>
     </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">입고 예정 일정</div></div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="background:var(--brand-lt);color:var(--brand);font-weight:700;font-size:11px;padding:4px 8px;border-radius:6px;white-space:nowrap">07.05</div>
-          <div><div class="fw-7 fs-12">IMP-0618 스페인 입고</div><div class="fs-11 c-txt3">삼겹살 벨리 28,500 kg</div></div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="background:var(--blue-lt);color:var(--blue);font-weight:700;font-size:11px;padding:4px 8px;border-radius:6px;white-space:nowrap">07.12</div>
-          <div><div class="fw-7 fs-12">IMP-0620 덴마크 입고</div><div class="fs-11 c-txt3">목살 숄더 30,000 kg</div></div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="background:var(--bg2);color:var(--txt3);font-weight:700;font-size:11px;padding:4px 8px;border-radius:6px;white-space:nowrap">07.20</div>
-          <div><div class="fw-7 fs-12 c-txt2">발주 계획 (스페인)</div><div class="fs-11 c-txt3">삼겹살 예정</div></div>
-        </div>
+
+```
+<div class="sc-card on" id="sc2" onclick="togSc(2)">
+  <div class="sc-num">S2</div>
+  <div class="sc-t">💳 매출채권 조기회수 프로그램</div>
+  <div class="sc-d">대형마트·편의점 체인에 조기결제 할인(2/10 net 30) 도입 및 전자세금계산서 자동발행으로 청구 리드타임을 단축합니다.</div>
+  <div class="sc-m"><div class="sm"><div class="sm-l">DSO</div><div class="sm-b">22일</div><div class="sm-a cg">13일</div></div><div class="sm"><div class="sm-l">채권회전율</div><div class="sm-b">16.6회</div><div class="sm-a cg">28.1회</div></div><div class="sm"><div class="sm-l">미수금</div><div class="sm-b">4,900만</div><div class="sm-a cg">2,100만</div></div></div>
+  <div class="sc-imp"><span class="si-l">💰 연간 현금흐름 개선</span><span class="si-v">+1.8억원</span></div>
+  <div class="sc-tags"><span class="stag se">실행기간 1개월</span><span class="stag se">낮은 난이도</span><span class="stag" style="background:var(--brand-lt);color:var(--brand)">영업팀 협의</span></div>
+</div>
+
+<div class="sc-card on" id="sc3" onclick="togSc(3)">
+  <div class="sc-num">S3</div>
+  <div class="sc-t">🤝 해외 공급사 결제조건 재협상</div>
+  <div class="sc-d">스페인·덴마크 주요 공급사와 결제조건을 즉시결제(T/T)에서 30~45일 결제로 재협상합니다. 대량 구매 레버리지를 활용합니다.</div>
+  <div class="sc-m"><div class="sm"><div class="sm-l">DPO</div><div class="sm-b">8일</div><div class="sm-a cg">30일</div></div><div class="sm"><div class="sm-l">채무회전율</div><div class="sm-b">45.6회</div><div class="sm-a cg">12.2회</div></div><div class="sm"><div class="sm-l">현금여유</div><div class="sm-b">즉시지급</div><div class="sm-a cg">+22일</div></div></div>
+  <div class="sc-imp"><span class="si-l">💰 연간 현금흐름 개선</span><span class="si-v">+2.4억원</span></div>
+  <div class="sc-tags"><span class="stag sm2">실행기간 2개월</span><span class="stag sm2">중간 난이도</span><span class="stag" style="background:var(--cyan-lt);color:var(--cyan)">무역금융 검토</span></div>
+</div>
+
+<div class="sc-card on" id="sc4" onclick="togSc(4)">
+  <div class="sc-num">S4</div>
+  <div class="sc-t">⚡ 생산 리드타임 단축 & 공정 최적화</div>
+  <div class="sc-d">절단-포장 공정 배치 재설계로 생산 대기시간을 줄이고, 소형 LOT 긴급처리 라인을 신설해 수주→출하 사이클을 단축합니다.</div>
+  <div class="sc-m"><div class="sm"><div class="sm-l">생산 LT</div><div class="sm-b">2.8일</div><div class="sm-a cg">1.5일</div></div><div class="sm"><div class="sm-l">DIO 기여</div><div class="sm-b">—</div><div class="sm-a cg">-3일</div></div><div class="sm"><div class="sm-l">납기준수율</div><div class="sm-b">94%</div><div class="sm-a cg">98.5%</div></div></div>
+  <div class="sc-imp"><span class="si-l">💰 연간 현금흐름 개선</span><span class="si-v">+0.9억원</span></div>
+  <div class="sc-tags"><span class="stag sh">실행기간 6개월</span><span class="stag sh">높은 난이도</span><span class="stag" style="background:var(--purple-lt);color:var(--purple)">설비투자 필요</span></div>
+</div>
+
+<!-- S5 full width -->
+<div class="sc-card on" id="sc5" onclick="togSc(5)" style="grid-column:1/-1;border-color:var(--brand)">
+  <div class="sc-num" style="background:linear-gradient(135deg,#f97316,#7c3aed)">S5 ⭐ AI 최우선 추천</div>
+  <div class="g g2" style="gap:18px;align-items:start">
+    <div>
+      <div class="sc-t" style="font-size:14px">🎯 제품 포트폴리오 재편 + 고회전 SKU 집중 전략</div>
+      <div class="sc-d">AI 분석 결과, 등심·삼겹살 고마진 품목에 자원을 집중하고 회전율 하위 20% SKU를 정리합니다. 위 4가지 시나리오의 효과를 증폭시킵니다.</div>
+      <div class="sc-tags"><span class="stag sm2">실행기간 4개월</span><span class="stag sm2">중간 난이도</span><span class="stag" style="background:var(--green-lt);color:var(--green)">S1~S4 시너지</span><span class="stag" style="background:var(--green-lt);color:var(--green)">마진율 +3.6%p</span></div>
+    </div>
+    <div>
+      <div class="sc-m" style="grid-template-columns:repeat(4,1fr)">
+        <div class="sm"><div class="sm-l">영업이익률</div><div class="sm-b">14.2%</div><div class="sm-a cg">17.8%</div></div>
+        <div class="sm"><div class="sm-l">SKU 수</div><div class="sm-b">12개</div><div class="sm-a cg">8개</div></div>
+        <div class="sm"><div class="sm-l">평균 DIO</div><div class="sm-b">24일</div><div class="sm-a cg">14일</div></div>
+        <div class="sm"><div class="sm-l">재고회전율</div><div class="sm-b">15.2회</div><div class="sm-a cg">26.1회</div></div>
       </div>
-      <hr class="divider">
-      <div class="notice notice-warn" style="margin:0;font-size:11.5px">IMP-0614 선적 서류 검토 필요 (06.22)</div>
+      <div class="sc-imp"><span class="si-l">💰 연간 현금흐름 개선 (전략 통합)</span><span class="si-v" style="font-size:18px">+7.5억원</span></div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- 시뮬레이터 -->
+
+  <div class="sim-box">
+    <div class="sim-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green)"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>전략 시뮬레이터 — 시나리오를 선택해 통합 효과를 확인하세요</div>
+    <div class="sim-cks">
+      <div class="sck on" data-i="1" onclick="simTog(this)"><div class="sck-n">S1</div><div class="sck-l">AI 수요예측<br>재고최적화</div></div>
+      <div class="sck on" data-i="2" onclick="simTog(this)"><div class="sck-n">S2</div><div class="sck-l">매출채권<br>조기회수</div></div>
+      <div class="sck on" data-i="3" onclick="simTog(this)"><div class="sck-n">S3</div><div class="sck-l">공급사 결제<br>조건 재협상</div></div>
+      <div class="sck on" data-i="4" onclick="simTog(this)"><div class="sck-n">S4</div><div class="sck-l">생산 리드타임<br>단축</div></div>
+      <div class="sck on" data-i="5" onclick="simTog(this)"><div class="sck-n">S5</div><div class="sck-l">포트폴리오<br>재편</div></div>
+    </div>
+    <div class="sim-r">
+      <div class="sr"><div class="sr-l">목표 CCC</div><div class="sr-v cg" id="sr1">21일</div><div class="sr-d cg" id="sr1d">38일 → -17일</div></div>
+      <div class="sr"><div class="sr-l">연간 현금 개선</div><div class="sr-v cn" id="sr2">+7.5억</div><div class="sr-d cg" id="sr2d">▲ 5개 전략</div></div>
+      <div class="sr"><div class="sr-l">목표 재고회전율</div><div class="sr-v cb" id="sr3">26.1회</div><div class="sr-d cg" id="sr3d">15.2회 → +10.9회</div></div>
+      <div class="sr"><div class="sr-l">영업이익률 개선</div><div class="sr-v cp" id="sr4">+3.6%p</div><div class="sr-d cg" id="sr4d">14.2% → 17.8%</div></div>
+    </div>
+    <canvas id="c-sim" height="130" style="margin-top:14px;width:100%"></canvas>
+  </div>
+
+  <!-- 실행 로드맵 -->
+
+  <div class="card mt">
+    <div class="ch"><div class="ct"><div class="cti" style="background:var(--blue-lt);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>AI 추천 실행 로드맵</div><button class="btn btn-p btn-sm" onclick="T('경영진에게 공유되었습니다.','ok')">📧 경영진 공유</button></div>
+    <div class="roadmap">
+      <div class="rm-col"><div class="rm-lbl" style="color:var(--brand)">1개월차</div><div class="rm-items"><div class="rm-item" style="background:var(--green-lt);color:var(--green)">✓ S2 조기결제 프로그램 착수</div><div class="rm-item" style="background:var(--blue-lt);color:var(--blue)">→ S3 협상 일정 수립</div><div class="rm-item" style="background:var(--bg2);color:var(--txt2)">• 기준선 측정 시작</div></div></div>
+      <div class="rm-col"><div class="rm-lbl" style="color:var(--blue)">2~3개월차</div><div class="rm-items"><div class="rm-item" style="background:var(--green-lt);color:var(--green)">✓ S2 조기결제 가동</div><div class="rm-item" style="background:var(--green-lt);color:var(--green)">✓ S3 결제조건 완료</div><div class="rm-item" style="background:var(--brand-lt);color:var(--brand)">→ S1 AI 모델 학습</div></div></div>
+      <div class="rm-col"><div class="rm-lbl" style="color:var(--purple)">4~5개월차</div><div class="rm-items"><div class="rm-item" style="background:var(--green-lt);color:var(--green)">✓ S1 AI 발주 적용</div><div class="rm-item" style="background:var(--green-lt);color:var(--green)">✓ S5 SKU 정리</div><div class="rm-item" style="background:var(--blue-lt);color:var(--blue)">→ S4 공정 개선 설계</div></div></div>
+      <div class="rm-col"><div class="rm-lbl" style="color:var(--green)">6개월차 이후</div><div class="rm-items"><div class="rm-item" style="background:var(--green-lt);color:var(--green)">✓ S4 공정 최적화</div><div class="rm-item" style="background:linear-gradient(135deg,var(--brand-lt),var(--purple-lt));color:var(--brand);font-weight:700">🎯 CCC 38→21일 달성</div><div class="rm-item" style="background:var(--green-lt);color:var(--green);font-weight:700">💰 현금흐름 +7.5억 실현</div></div></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 원자재 재고 ══════════ -->
-<div id="page-rawstock" class="page">
-  <div class="grid g4 mb16">
-    <div class="card kpi-card"><div class="kpi-header"><div><div class="kpi-label">총 원자재 재고</div><div class="kpi-value c-blue">284.6<span>톤</span></div></div><div class="kpi-icon ib-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/></svg></div></div><div class="kpi-footer"><span class="kpi-sub-label">냉동창고 A,B,C동</span></div></div>
-    <div class="card kpi-card"><div class="kpi-header"><div><div class="kpi-label">삼겹살 (벨리)</div><div class="kpi-value c-green">98.5<span>톤</span></div></div><div class="kpi-icon ib-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div></div><div class="kpi-footer"><span class="kpi-sub-label">LOT 3개 보관</span></div></div>
-    <div class="card kpi-card"><div class="kpi-header"><div><div class="kpi-label">목살 (숄더)</div><div class="kpi-value" style="color:var(--yellow)">72.1<span>톤</span></div></div><div class="kpi-icon ib-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div></div><div class="kpi-footer"><span class="kpi-sub-label">LOT 2개 보관</span></div></div>
-    <div class="card kpi-card"><div class="kpi-header"><div><div class="kpi-label">등심 (로인)</div><div class="kpi-value c-red">14.2<span>톤</span></div></div><div class="kpi-icon ib-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div></div><div class="kpi-footer"><span class="kpi-change kpi-down">안전재고 이하!</span></div></div>
+<!-- ═══ 수입 관리 ═══ -->
+
+<div id="p-import" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">총 발주 건수</div><div class="kv">6<span>건</span></div></div>
+    <div class="card kc"><div class="kl">총 발주 중량</div><div class="kv cb">203.5<span>톤</span></div></div>
+    <div class="card kc"><div class="kl">총 발주 금액</div><div class="kv cn">$700,125</div></div>
+    <div class="card kc"><div class="kl">통관 진행중</div><div class="kv cy">3<span>건</span></div></div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title">원자재 재고 상세</div><button class="btn btn-secondary btn-sm" onclick="toast('재고 실사 요청이 등록되었습니다.','ok')">📋 재고 실사 요청</button></div>
-    <div class="table-wrap">
+    <div class="ch"><div class="ct">수입 주문 현황</div><button class="btn btn-p btn-sm" onclick="T('수입 발주서가 생성되었습니다.','ok')">+ 수입 발주</button></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>발주번호</th><th>공급업체</th><th>원산지</th><th>품목</th><th>발주중량</th><th>단가($/kg)</th><th>발주금액</th><th>선적일</th><th>예상입고</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td><span class="lot">IMP-2025-0618</span></td><td class="fw7">Iberian Pork Co.</td><td><span class="badge bb">스페인</span></td><td>삼겹살 (벨리)</td><td class="mono">28,500 kg</td><td class="mono">$3.85</td><td class="mono fw7 cn">$109,725</td><td>2025.06.10</td><td>2025.07.05</td><td><span class="badge by">통관중</span></td></tr>
+          <tr><td><span class="lot">IMP-2025-0614</span></td><td class="fw7">Nordic Meat GmbH</td><td><span class="badge bc">독일</span></td><td>목살 (숄더)</td><td class="mono">42,000 kg</td><td class="mono">$3.20</td><td class="mono fw7 cn">$134,400</td><td>2025.05.28</td><td>2025.06.22</td><td><span class="badge by">운송중</span></td></tr>
+          <tr><td><span class="lot">IMP-2025-0608</span></td><td class="fw7">Iberian Pork Co.</td><td><span class="badge bb">스페인</span></td><td>삼겹살 (벨리)</td><td class="mono">35,000 kg</td><td class="mono">$3.80</td><td class="mono fw7 cn">$133,000</td><td>2025.05.20</td><td>2025.06.14</td><td><span class="badge bg">통관완료</span></td></tr>
+          <tr><td><span class="lot">IMP-2025-0601</span></td><td class="fw7">Danish Crown A/S</td><td><span class="badge bp">덴마크</span></td><td>앞다리살 (픽닉)</td><td class="mono">50,000 kg</td><td class="mono">$2.95</td><td class="mono fw7 cn">$147,500</td><td>2025.05.12</td><td>2025.06.08</td><td><span class="badge bg">입고완료</span></td></tr>
+          <tr><td><span class="lot">IMP-2025-0620</span></td><td class="fw7">Danish Crown A/S</td><td><span class="badge bp">덴마크</span></td><td>목살 (숄더)</td><td class="mono">30,000 kg</td><td class="mono">$3.15</td><td class="mono fw7 cn">$94,500</td><td>2025.06.18</td><td>2025.07.12</td><td><span class="badge bb">발주완료</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 원자재 재고 ═══ -->
+
+<div id="p-rawstock" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">총 원자재 재고</div><div class="kv cb">284.6<span>톤</span></div></div>
+    <div class="card kc"><div class="kl">삼겹살 (벨리)</div><div class="kv cg">98.5<span>톤</span></div></div>
+    <div class="card kc"><div class="kl">목살 (숄더)</div><div class="kv cy">72.1<span>톤</span></div></div>
+    <div class="card kc"><div class="kl">등심 (로인)</div><div class="kv cr">14.2<span>톤 ⚠</span></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div class="ct">원자재 재고 상세</div><button class="btn btn-s btn-sm" onclick="T('재고 실사 요청이 등록되었습니다.','ok')">📋 재고 실사 요청</button></div>
+    <div class="tw">
       <table>
         <thead><tr><th>LOT번호</th><th>원산지</th><th>부위</th><th>입고일</th><th>유통기한</th><th>보관창고</th><th>온도</th><th>입고중량</th><th>현재잔량</th><th>사용율</th><th>상태</th></tr></thead>
         <tbody>
-          <tr><td><span class="lot-tag">LOT-250608-SP</span></td><td>스페인</td><td>삼겹살 (벨리)</td><td>2025.06.08</td><td>2026.06.07</td><td>A동-3F</td><td><span class="temp temp-ok">-18°C</span></td><td class="td-mono">35,000 kg</td><td class="td-mono fw-7 c-green">31,450 kg</td><td><div class="prog" style="width:100px"><div class="prog-fill" style="width:10%;background:var(--green)"></div></div></td><td><span class="badge b-green">정상</span></td></tr>
-          <tr><td><span class="lot-tag">LOT-250601-DK</span></td><td>덴마크</td><td>앞다리살 (픽닉)</td><td>2025.06.01</td><td>2026.05.31</td><td>B동-1F</td><td><span class="temp temp-ok">-18°C</span></td><td class="td-mono">50,000 kg</td><td class="td-mono fw-7 c-green">43,200 kg</td><td><div class="prog" style="width:100px"><div class="prog-fill" style="width:14%;background:var(--green)"></div></div></td><td><span class="badge b-green">정상</span></td></tr>
-          <tr><td><span class="lot-tag">LOT-250528-DE</span></td><td>독일</td><td>목살 (숄더)</td><td>2025.05.28</td><td>2026.05.27</td><td>B동-2F</td><td><span class="temp temp-ok">-18°C</span></td><td class="td-mono">42,000 kg</td><td class="td-mono fw-7" style="color:var(--yellow)">28,600 kg</td><td><div class="prog" style="width:100px"><div class="prog-fill" style="width:32%;background:var(--yellow)"></div></div></td><td><span class="badge b-yellow">절반사용</span></td></tr>
-          <tr><td><span class="lot-tag">LOT-250528-CA</span></td><td>캐나다</td><td>등심 (로인)</td><td>2025.05.28</td><td>2026.05.27</td><td>A동-1F</td><td><span class="temp temp-warn">-12°C ⚠</span></td><td class="td-mono">18,000 kg</td><td class="td-mono fw-7 c-red">14,200 kg</td><td><div class="prog" style="width:100px"><div class="prog-fill" style="width:21%;background:var(--red)"></div></div></td><td><span class="badge b-red">온도이상</span></td></tr>
-          <tr><td><span class="lot-tag">LOT-250510-SP</span></td><td>스페인</td><td>삼겹살 (벨리)</td><td>2025.05.10</td><td>2026.05.09</td><td>C동-1F</td><td><span class="temp temp-ok">-18°C</span></td><td class="td-mono">40,000 kg</td><td class="td-mono fw-7" style="color:var(--yellow)">22,350 kg</td><td><div class="prog" style="width:100px"><div class="prog-fill" style="width:44%;background:var(--yellow)"></div></div></td><td><span class="badge b-yellow">절반사용</span></td></tr>
-          <tr><td><span class="lot-tag">LOT-250418-SP</span></td><td>스페인</td><td>삼겹살 (벨리)</td><td>2025.04.18</td><td>2026.04.17</td><td>A동-2F</td><td><span class="temp temp-ok">-18°C</span></td><td class="td-mono">44,700 kg</td><td class="td-mono fw-7 c-red">4,700 kg</td><td><div class="prog" style="width:100px"><div class="prog-fill" style="width:89%;background:var(--red)"></div></div></td><td><span class="badge b-red">잔량부족</span></td></tr>
+          <tr><td><span class="lot">LOT-250608-SP</span></td><td>스페인</td><td>삼겹살 (벨리)</td><td>2025.06.08</td><td>2026.06.07</td><td>A동-3F</td><td><span class="temp tok">-18°C</span></td><td class="mono">35,000 kg</td><td class="mono fw7 cg">31,450 kg</td><td><div class="prog" style="width:90px"><div class="pf" style="width:10%;background:var(--green)"></div></div></td><td><span class="badge bg">정상</span></td></tr>
+          <tr><td><span class="lot">LOT-250601-DK</span></td><td>덴마크</td><td>앞다리살 (픽닉)</td><td>2025.06.01</td><td>2026.05.31</td><td>B동-1F</td><td><span class="temp tok">-18°C</span></td><td class="mono">50,000 kg</td><td class="mono fw7 cg">43,200 kg</td><td><div class="prog" style="width:90px"><div class="pf" style="width:14%;background:var(--green)"></div></div></td><td><span class="badge bg">정상</span></td></tr>
+          <tr><td><span class="lot">LOT-250528-DE</span></td><td>독일</td><td>목살 (숄더)</td><td>2025.05.28</td><td>2026.05.27</td><td>B동-2F</td><td><span class="temp tok">-18°C</span></td><td class="mono">42,000 kg</td><td class="mono fw7 cy">28,600 kg</td><td><div class="prog" style="width:90px"><div class="pf" style="width:32%;background:var(--yellow)"></div></div></td><td><span class="badge by">절반사용</span></td></tr>
+          <tr><td><span class="lot">LOT-250528-CA</span></td><td>캐나다</td><td>등심 (로인)</td><td>2025.05.28</td><td>2026.05.27</td><td>A동-1F</td><td><span class="temp twn">-12°C ⚠</span></td><td class="mono">18,000 kg</td><td class="mono fw7 cr">14,200 kg</td><td><div class="prog" style="width:90px"><div class="pf" style="width:21%;background:var(--red)"></div></div></td><td><span class="badge br">온도이상</span></td></tr>
+          <tr><td><span class="lot">LOT-250418-SP</span></td><td>스페인</td><td>삼겹살 (벨리)</td><td>2025.04.18</td><td>2026.04.17</td><td>A동-2F</td><td><span class="temp tok">-18°C</span></td><td class="mono">44,700 kg</td><td class="mono fw7 cr">4,700 kg</td><td><div class="prog" style="width:90px"><div class="pf" style="width:89%;background:var(--red)"></div></div></td><td><span class="badge br">잔량부족</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 생산·절단 관리 ══════════ -->
-<div id="page-production" class="page">
-  <div class="grid g4 mb16">
-    <div class="card kpi-card"><div class="kpi-label">오늘 작업지시</div><div class="kpi-value">17<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">완료</div><div class="kpi-value c-green">14<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">진행중</div><div class="kpi-value" style="color:var(--yellow)">3<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">오늘 절단 총량</div><div class="kpi-value c-blue">24,850<span>kg</span></div></div>
+<!-- ═══ 생산·절단 ═══ -->
+
+<div id="p-production" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">오늘 작업지시</div><div class="kv">17<span>건</span></div></div>
+    <div class="card kc"><div class="kl">완료</div><div class="kv cg">14<span>건</span></div></div>
+    <div class="card kc"><div class="kl">진행중</div><div class="kv cy">3<span>건</span></div></div>
+    <div class="card kc"><div class="kl">오늘 절단 총량</div><div class="kv cb">24,850<span>kg</span></div></div>
   </div>
-  <div class="grid g-3-2">
+  <div class="g g21">
     <div class="card">
-      <div class="card-header"><div class="card-title">작업지시 현황</div><button class="btn btn-primary btn-sm" onclick="toast('새 작업지시서가 생성되었습니다.','ok')">+ 작업지시 생성</button></div>
-      <div class="table-wrap">
+      <div class="ch"><div class="ct">작업지시 현황</div><button class="btn btn-p btn-sm" onclick="T('작업지시서가 생성되었습니다.','ok')">+ 작업지시 생성</button></div>
+      <div class="tw">
         <table>
           <thead><tr><th>작업번호</th><th>원자재 LOT</th><th>부위</th><th>목표규격</th><th>목표</th><th>실적(kg)</th><th>달성율</th><th>작업팀</th><th>상태</th></tr></thead>
           <tbody>
-            <tr><td><span class="lot-tag">WO-618-001</span></td><td>LOT-250608-SP</td><td>삼겹살</td><td>200g/팩</td><td class="td-mono">5,000팩</td><td class="td-mono fw-7 c-green">5,000 kg</td><td><span class="badge b-green">100%</span></td><td>A팀</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td><span class="lot-tag">WO-618-002</span></td><td>LOT-250601-DK</td><td>앞다리살</td><td>500g/팩</td><td class="td-mono">2,000팩</td><td class="td-mono fw-7 c-green">2,000 kg</td><td><span class="badge b-green">100%</span></td><td>B팀</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td><span class="lot-tag">WO-618-003</span></td><td>LOT-250528-DE</td><td>목살</td><td>300g/팩</td><td class="td-mono">3,000팩</td><td class="td-mono fw-7 c-green">3,000 kg</td><td><span class="badge b-green">100%</span></td><td>A팀</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td><span class="lot-tag">WO-618-004</span></td><td>LOT-250528-CA</td><td>등심</td><td>250g/팩</td><td class="td-mono">2,000팩</td><td class="td-mono fw-7 c-green">2,000 kg</td><td><span class="badge b-green">100%</span></td><td>C팀</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td><span class="lot-tag">WO-618-015</span></td><td>LOT-250601-DK</td><td>앞다리살</td><td>500g/팩</td><td class="td-mono">1,500팩</td><td class="td-mono fw-7" style="color:var(--yellow)">680 kg</td><td><span class="badge b-yellow">45%</span></td><td>A팀</td><td><span class="badge b-yellow">진행중</span></td></tr>
-            <tr><td><span class="lot-tag">WO-618-016</span></td><td>LOT-250510-SP</td><td>삼겹살</td><td>200g/팩</td><td class="td-mono">3,500팩</td><td class="td-mono fw-7" style="color:var(--yellow)">1,200 kg</td><td><span class="badge b-yellow">34%</span></td><td>B팀</td><td><span class="badge b-yellow">진행중</span></td></tr>
-            <tr><td><span class="lot-tag">WO-618-017</span></td><td>LOT-250528-DE</td><td>목살</td><td>300g/팩</td><td class="td-mono">2,500팩</td><td class="td-mono fw-7" style="color:var(--yellow)">970 kg</td><td><span class="badge b-yellow">39%</span></td><td>C팀</td><td><span class="badge b-yellow">진행중</span></td></tr>
+            <tr><td><span class="lot">WO-618-001</span></td><td>LOT-250608-SP</td><td>삼겹살</td><td>200g/팩</td><td class="mono">5,000팩</td><td class="mono fw7 cg">5,000</td><td><span class="badge bg">100%</span></td><td>A팀</td><td><span class="badge bg">완료</span></td></tr>
+            <tr><td><span class="lot">WO-618-002</span></td><td>LOT-250601-DK</td><td>앞다리살</td><td>500g/팩</td><td class="mono">2,000팩</td><td class="mono fw7 cg">2,000</td><td><span class="badge bg">100%</span></td><td>B팀</td><td><span class="badge bg">완료</span></td></tr>
+            <tr><td><span class="lot">WO-618-015</span></td><td>LOT-250601-DK</td><td>앞다리살</td><td>500g/팩</td><td class="mono">1,500팩</td><td class="mono fw7 cy">680</td><td><span class="badge by">45%</span></td><td>A팀</td><td><span class="badge by">진행중</span></td></tr>
+            <tr><td><span class="lot">WO-618-016</span></td><td>LOT-250510-SP</td><td>삼겹살</td><td>200g/팩</td><td class="mono">3,500팩</td><td class="mono fw7 cy">1,200</td><td><span class="badge by">34%</span></td><td>B팀</td><td><span class="badge by">진행중</span></td></tr>
+            <tr><td><span class="lot">WO-618-017</span></td><td>LOT-250528-DE</td><td>목살</td><td>300g/팩</td><td class="mono">2,500팩</td><td class="mono fw7 cy">970</td><td><span class="badge by">39%</span></td><td>C팀</td><td><span class="badge by">진행중</span></td></tr>
           </tbody>
         </table>
       </div>
     </div>
     <div class="card">
-      <div class="card-header"><div class="card-title">팀별 생산 실적</div></div>
-      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:16px">
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">A팀 (절단1반)</span><span class="fs-12 fw-7 c-green">8,450 kg</span></div><div class="prog"><div class="prog-fill" style="width:85%;background:var(--green)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">B팀 (절단2반)</span><span class="fs-12 fw-7 c-brand">9,200 kg</span></div><div class="prog"><div class="prog-fill" style="width:92%;background:var(--brand)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">C팀 (절단3반)</span><span class="fs-12 fw-7 c-blue">7,200 kg</span></div><div class="prog"><div class="prog-fill" style="width:72%;background:var(--blue)"></div></div></div>
+      <div class="ch"><div class="ct">팀별 생산 실적</div></div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">A팀 (절단1반)</span><span class="fs12 fw7 cg">8,450 kg</span></div><div class="prog"><div class="pf" style="width:85%;background:var(--green)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">B팀 (절단2반)</span><span class="fs12 fw7 cn">9,200 kg</span></div><div class="prog"><div class="pf" style="width:92%;background:var(--brand)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">C팀 (절단3반)</span><span class="fs12 fw7 cb">7,200 kg</span></div><div class="prog"><div class="pf" style="width:72%;background:var(--blue)"></div></div></div>
       </div>
-      <hr class="divider">
-      <div class="sec-title fs-12 mb16" style="margin-bottom:10px">오늘 손실율 현황</div>
-      <ul class="stat-list">
-        <li class="stat-item"><span class="stat-label">삼겹살</span><span class="stat-val c-green">2.1%</span></li>
-        <li class="stat-item"><span class="stat-label">목살</span><span class="stat-val c-green">1.8%</span></li>
-        <li class="stat-item"><span class="stat-label">앞다리살</span><span class="stat-val" style="color:var(--yellow)">3.2% ⚠</span></li>
-        <li class="stat-item"><span class="stat-label">등심</span><span class="stat-val c-green">1.5%</span></li>
-        <li class="stat-item"><span class="stat-label">평균 손실율</span><span class="stat-val" style="color:var(--yellow)">2.2%</span></li>
+      <hr>
+      <ul class="sl">
+        <li class="si"><span class="sl-l">삼겹살 손실율</span><span class="sl-v cg">2.1%</span></li>
+        <li class="si"><span class="sl-l">목살 손실율</span><span class="sl-v cg">1.8%</span></li>
+        <li class="si"><span class="sl-l">앞다리살 손실율</span><span class="sl-v cy">3.2% ⚠</span></li>
+        <li class="si"><span class="sl-l">평균 손실율</span><span class="sl-v cy">2.2%</span></li>
       </ul>
-      <div class="notice notice-warn mt12" style="margin-top:12px;font-size:11.5px">앞다리살 손실율 목표(2.5%) 초과 → 절단 가이드 재확인 필요</div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 포장 관리 ══════════ -->
-<div id="page-packaging" class="page">
-  <div class="grid g4 mb16">
-    <div class="card kpi-card"><div class="kpi-label">오늘 포장 완료</div><div class="kpi-value c-green">38,420<span>팩</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">포장 진행중</div><div class="kpi-value" style="color:var(--yellow)">6,500<span>팩</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">포장재 잔량</div><div class="kpi-value c-blue">28.4<span>만장</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">불량 포장 (오늘)</div><div class="kpi-value c-red">124<span>팩</span></div></div>
-  </div>
-  <div class="grid g-3-2">
-    <div class="card">
-      <div class="card-header"><div class="card-title">포장 라인별 현황</div><button class="btn btn-primary btn-sm" onclick="toast('포장 작업지시서가 생성되었습니다.','ok')">+ 포장 작업지시</button></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>포장라인</th><th>제품명</th><th>규격</th><th>목표</th><th>완료</th><th>불량</th><th>불량율</th><th>담당자</th><th>상태</th></tr></thead>
-          <tbody>
-            <tr><td class="fw-7">라인 1</td><td>냉동삼겹살</td><td>200g × 5팩</td><td class="td-mono">5,000</td><td class="td-mono fw-7 c-green">5,000</td><td class="td-mono">18</td><td>0.36%</td><td>홍포장</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td class="fw-7">라인 2</td><td>냉동삼겹살</td><td>200g 낱개</td><td class="td-mono">8,000</td><td class="td-mono fw-7 c-green">7,980</td><td class="td-mono">22</td><td>0.28%</td><td>김포장</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td class="fw-7">라인 3</td><td>냉동목살</td><td>300g 낱개</td><td class="td-mono">6,000</td><td class="td-mono fw-7 c-green">5,960</td><td class="td-mono">31</td><td>0.52%</td><td>이포장</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td class="fw-7">라인 4</td><td>냉동앞다리</td><td>500g 낱개</td><td class="td-mono">4,000</td><td class="td-mono fw-7 c-green">4,000</td><td class="td-mono">12</td><td>0.30%</td><td>박포장</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td class="fw-7">라인 5</td><td>냉동등심</td><td>250g 낱개</td><td class="td-mono">4,500</td><td class="td-mono fw-7 c-green">4,480</td><td class="td-mono">8</td><td>0.18%</td><td>정포장</td><td><span class="badge b-green">완료</span></td></tr>
-            <tr><td class="fw-7">라인 6</td><td>냉동삼겹살</td><td>200g × 5팩</td><td class="td-mono">4,000</td><td class="td-mono fw-7" style="color:var(--yellow)">2,800</td><td class="td-mono">20</td><td>0.71%</td><td>홍포장</td><td><span class="badge b-yellow">진행중</span></td></tr>
-            <tr><td class="fw-7">라인 7</td><td>냉동목살</td><td>300g × 3팩</td><td class="td-mono">3,500</td><td class="td-mono fw-7" style="color:var(--yellow)">1,900</td><td class="td-mono">8</td><td>0.42%</td><td>최포장</td><td><span class="badge b-yellow">진행중</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">포장재 재고 현황</div></div>
-      <ul class="stat-list">
-        <li class="stat-item"><span class="stat-label">트레이 (소, 흰색)</span><span class="stat-val">84,200장</span></li>
-        <li class="stat-item"><span class="stat-label">트레이 (대, 흰색)</span><span class="stat-val">41,500장</span></li>
-        <li class="stat-item"><span class="stat-label">랩 필름 (PVC)</span><span class="stat-val">12롤</span></li>
-        <li class="stat-item"><span class="stat-label">진공 포장재 (200g)</span><span class="stat-val">156,000장</span></li>
-        <li class="stat-item"><span class="stat-label">진공 포장재 (500g)</span><span class="stat-val" style="color:var(--yellow)">28,400장 ⚠</span></li>
-        <li class="stat-item"><span class="stat-label">마스터박스 (소)</span><span class="stat-val">3,200개</span></li>
-        <li class="stat-item"><span class="stat-label">마스터박스 (대)</span><span class="stat-val c-red">820개 ⚠</span></li>
-      </ul>
-      <hr class="divider">
-      <div class="notice notice-warn" style="margin-bottom:10px;font-size:12px">500g 진공 포장재 및 대형 박스 발주 필요</div>
-      <button class="btn btn-primary" style="width:100%" onclick="toast('포장재 발주 요청이 등록되었습니다.','ok')">포장재 발주 요청</button>
-    </div>
-  </div>
-</div>
+<!-- ═══ 포장 관리 ═══ -->
 
-<!-- ══════════ 수주·판매 ══════════ -->
-<div id="page-sales" class="page">
-  <div class="grid g4 mb16">
-    <div class="card kpi-card"><div class="kpi-label">이번달 수주 건수</div><div class="kpi-value">42<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">이번달 수주 금액</div><div class="kpi-value c-brand">6.24<span>억원</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">출하 완료</div><div class="kpi-value c-green">31<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">납기 임박 (미출하)</div><div class="kpi-value c-red">4<span>건</span></div></div>
+<div id="p-packaging" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">오늘 포장 완료</div><div class="kv cg">38,420<span>팩</span></div></div>
+    <div class="card kc"><div class="kl">포장 진행중</div><div class="kv cy">6,500<span>팩</span></div></div>
+    <div class="card kc"><div class="kl">포장재 잔량</div><div class="kv cb">28.4<span>만장</span></div></div>
+    <div class="card kc"><div class="kl">불량 포장 (오늘)</div><div class="kv cr">124<span>팩</span></div></div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title">수주 목록</div><button class="btn btn-primary btn-sm" onclick="openOrderModal()">+ 수주 등록</button></div>
-    <div class="table-wrap">
+    <div class="ch"><div class="ct">포장 라인별 현황</div><button class="btn btn-p btn-sm" onclick="T('포장 작업지시서가 생성되었습니다.','ok')">+ 포장 작업지시</button></div>
+    <div class="tw">
       <table>
-        <thead><tr><th>수주번호</th><th>거래처</th><th>제품</th><th>규격</th><th>수량</th><th>단가</th><th>금액</th><th>납기일</th><th>수주일</th><th>상태</th></tr></thead>
+        <thead><tr><th>라인</th><th>제품</th><th>규격</th><th>목표</th><th>완료</th><th>불량</th><th>불량율</th><th>상태</th></tr></thead>
         <tbody>
-          <tr><td><span class="lot-tag">SO-618-042</span></td><td class="fw-7">CU편의점</td><td>냉동삼겹살</td><td>200g</td><td class="td-mono">2,000팩</td><td class="td-mono">₩2,800</td><td class="td-mono fw-7 c-brand">560만원</td><td>2025.06.22</td><td>06.18</td><td><span class="badge b-blue">수주</span></td></tr>
-          <tr><td><span class="lot-tag">SO-618-041</span></td><td class="fw-7">이마트 물류</td><td>냉동목살</td><td>300g</td><td class="td-mono">1,500팩</td><td class="td-mono">₩3,200</td><td class="td-mono fw-7 c-brand">480만원</td><td>2025.06.21</td><td>06.18</td><td><span class="badge b-yellow">생산중</span></td></tr>
-          <tr><td><span class="lot-tag">SO-617-040</span></td><td class="fw-7">한국마트</td><td>냉동앞다리</td><td>500g</td><td class="td-mono">800팩</td><td class="td-mono">₩2,500</td><td class="td-mono fw-7 c-brand">200만원</td><td>2025.06.20</td><td>06.17</td><td><span class="badge b-yellow">포장중</span></td></tr>
-          <tr><td><span class="lot-tag">SO-617-039</span></td><td class="fw-7">롯데마트 물류</td><td>냉동삼겹살</td><td>200g</td><td class="td-mono">3,000팩</td><td class="td-mono">₩2,750</td><td class="td-mono fw-7 c-brand">825만원</td><td>2025.06.19</td><td>06.17</td><td><span class="badge b-red">납기임박</span></td></tr>
-          <tr><td><span class="lot-tag">SO-617-038</span></td><td class="fw-7">GS리테일</td><td>냉동등심</td><td>250g</td><td class="td-mono">1,200팩</td><td class="td-mono">₩3,800</td><td class="td-mono fw-7 c-brand">456만원</td><td>2025.06.20</td><td>06.17</td><td><span class="badge b-red">납기임박</span></td></tr>
-          <tr><td><span class="lot-tag">SO-616-035</span></td><td class="fw-7">CU편의점</td><td>냉동삼겹살</td><td>200g</td><td class="td-mono">5,000팩</td><td class="td-mono">₩2,800</td><td class="td-mono fw-7 c-brand">1,400만원</td><td>2025.06.18</td><td>06.16</td><td><span class="badge b-green">출하완료</span></td></tr>
-          <tr><td><span class="lot-tag">SO-615-030</span></td><td class="fw-7">이마트 물류</td><td>냉동목살</td><td>300g</td><td class="td-mono">2,000팩</td><td class="td-mono">₩3,200</td><td class="td-mono fw-7 c-brand">640만원</td><td>2025.06.17</td><td>06.15</td><td><span class="badge b-green">출하완료</span></td></tr>
+          <tr><td class="fw7">라인 1</td><td>냉동삼겹살</td><td>200g × 5팩</td><td class="mono">5,000</td><td class="mono fw7 cg">5,000</td><td class="mono">18</td><td>0.36%</td><td><span class="badge bg">완료</span></td></tr>
+          <tr><td class="fw7">라인 2</td><td>냉동삼겹살</td><td>200g 낱개</td><td class="mono">8,000</td><td class="mono fw7 cg">7,980</td><td class="mono">22</td><td>0.28%</td><td><span class="badge bg">완료</span></td></tr>
+          <tr><td class="fw7">라인 3</td><td>냉동목살</td><td>300g 낱개</td><td class="mono">6,000</td><td class="mono fw7 cg">5,960</td><td class="mono">31</td><td>0.52%</td><td><span class="badge bg">완료</span></td></tr>
+          <tr><td class="fw7">라인 4</td><td>냉동앞다리</td><td>500g 낱개</td><td class="mono">4,000</td><td class="mono fw7 cg">4,000</td><td class="mono">12</td><td>0.30%</td><td><span class="badge bg">완료</span></td></tr>
+          <tr><td class="fw7">라인 6</td><td>냉동삼겹살</td><td>200g × 5팩</td><td class="mono">4,000</td><td class="mono fw7 cy">2,800</td><td class="mono">20</td><td>0.71%</td><td><span class="badge by">진행중</span></td></tr>
+          <tr><td class="fw7">라인 7</td><td>냉동목살</td><td>300g × 3팩</td><td class="mono">3,500</td><td class="mono fw7 cy">1,900</td><td class="mono">8</td><td>0.42%</td><td><span class="badge by">진행중</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 출하·배송 ══════════ -->
-<div id="page-shipment" class="page">
-  <div class="grid g4 mb16">
-    <div class="card kpi-card"><div class="kpi-label">오늘 출하 예정</div><div class="kpi-value">8<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">출하 완료</div><div class="kpi-value c-green">5<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">오늘 출하량</div><div class="kpi-value c-blue">18,450<span>kg</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">배차 가능 차량</div><div class="kpi-value c-brand">3<span>대</span></div></div>
+<!-- ═══ 수주·판매 ═══ -->
+
+<div id="p-sales" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">이번달 수주 건수</div><div class="kv">42<span>건</span></div></div>
+    <div class="card kc"><div class="kl">이번달 수주 금액</div><div class="kv cn">6.24<span>억원</span></div></div>
+    <div class="card kc"><div class="kl">출하 완료</div><div class="kv cg">31<span>건</span></div></div>
+    <div class="card kc"><div class="kl">납기 임박 (미출하)</div><div class="kv cr">4<span>건</span></div></div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title">출하 현황</div><button class="btn btn-primary btn-sm" onclick="toast('출하 지시서가 생성되었습니다.','ok')">+ 출하 지시</button></div>
-    <div class="table-wrap">
+    <div class="ch"><div class="ct">수주 목록</div><button class="btn btn-p btn-sm" onclick="openM()">+ 수주 등록</button></div>
+    <div class="tw">
       <table>
-        <thead><tr><th>출하번호</th><th>거래처</th><th>제품</th><th>수량</th><th>중량</th><th>차량번호</th><th>기사</th><th>출하시각</th><th>도착지</th><th>상태</th></tr></thead>
+        <thead><tr><th>수주번호</th><th>거래처</th><th>제품</th><th>규격</th><th>수량</th><th>단가</th><th>금액</th><th>납기일</th><th>상태</th></tr></thead>
         <tbody>
-          <tr><td><span class="lot-tag">SH-618-08</span></td><td class="fw-7">CU편의점</td><td>냉동삼겹살 200g</td><td class="td-mono">2,000팩</td><td class="td-mono">400kg</td><td>12가 3456</td><td>김기사</td><td>08:00</td><td>인천 물류센터</td><td><span class="badge b-green">배송완료</span></td></tr>
-          <tr><td><span class="lot-tag">SH-618-07</span></td><td class="fw-7">이마트 물류</td><td>냉동목살 300g</td><td class="td-mono">1,500팩</td><td class="td-mono">450kg</td><td>34나 7890</td><td>이기사</td><td>09:30</td><td>용인 물류센터</td><td><span class="badge b-green">배송완료</span></td></tr>
-          <tr><td><span class="lot-tag">SH-618-06</span></td><td class="fw-7">롯데마트</td><td>냉동삼겹살 200g</td><td class="td-mono">3,000팩</td><td class="td-mono">600kg</td><td>56다 1234</td><td>박기사</td><td>10:00</td><td>서울 동대문</td><td><span class="badge b-green">배송완료</span></td></tr>
-          <tr><td><span class="lot-tag">SH-618-05</span></td><td class="fw-7">GS리테일</td><td>냉동등심 250g</td><td class="td-mono">1,200팩</td><td class="td-mono">300kg</td><td>78라 5678</td><td>최기사</td><td>11:00</td><td>부천 물류센터</td><td><span class="badge b-green">배송완료</span></td></tr>
-          <tr><td><span class="lot-tag">SH-618-04</span></td><td class="fw-7">한국마트</td><td>냉동앞다리 500g</td><td class="td-mono">800팩</td><td class="td-mono">400kg</td><td>12가 3456</td><td>김기사</td><td>13:30</td><td>수원 본점</td><td><span class="badge b-green">배송완료</span></td></tr>
-          <tr><td><span class="lot-tag">SH-618-03</span></td><td class="fw-7">농협유통</td><td>냉동목살 300g</td><td class="td-mono">2,000팩</td><td class="td-mono">600kg</td><td>34나 7890</td><td>이기사</td><td>14:00</td><td>안양 하나로</td><td><span class="badge b-yellow">배송중</span></td></tr>
-          <tr><td><span class="lot-tag">SH-618-02</span></td><td class="fw-7">CU편의점</td><td>냉동삼겹살 200g</td><td class="td-mono">4,500팩</td><td class="td-mono">900kg</td><td>56다 1234</td><td>박기사</td><td>15:00</td><td>성남 물류</td><td><span class="badge b-yellow">상차중</span></td></tr>
-          <tr><td><span class="lot-tag">SH-618-01</span></td><td class="fw-7">코스트코</td><td>냉동삼겹살 1kg</td><td class="td-mono">500팩</td><td class="td-mono">500kg</td><td>—</td><td>—</td><td>16:30 예정</td><td>일산 코스트코</td><td><span class="badge b-gray">대기중</span></td></tr>
+          <tr><td><span class="lot">SO-618-042</span></td><td class="fw7">CU편의점</td><td>냉동삼겹살</td><td>200g</td><td class="mono">2,000팩</td><td class="mono">₩2,800</td><td class="mono fw7 cn">560만원</td><td>2025.06.22</td><td><span class="badge bb">수주</span></td></tr>
+          <tr><td><span class="lot">SO-618-041</span></td><td class="fw7">이마트 물류</td><td>냉동목살</td><td>300g</td><td class="mono">1,500팩</td><td class="mono">₩3,200</td><td class="mono fw7 cn">480만원</td><td>2025.06.21</td><td><span class="badge by">생산중</span></td></tr>
+          <tr><td><span class="lot">SO-617-040</span></td><td class="fw7">한국마트</td><td>냉동앞다리</td><td>500g</td><td class="mono">800팩</td><td class="mono">₩2,500</td><td class="mono fw7 cn">200만원</td><td>2025.06.20</td><td><span class="badge by">포장중</span></td></tr>
+          <tr><td><span class="lot">SO-617-039</span></td><td class="fw7">롯데마트</td><td>냉동삼겹살</td><td>200g</td><td class="mono">3,000팩</td><td class="mono">₩2,750</td><td class="mono fw7 cn">825만원</td><td>2025.06.19</td><td><span class="badge br">납기임박</span></td></tr>
+          <tr><td><span class="lot">SO-617-038</span></td><td class="fw7">GS리테일</td><td>냉동등심</td><td>250g</td><td class="mono">1,200팩</td><td class="mono">₩3,800</td><td class="mono fw7 cn">456만원</td><td>2025.06.20</td><td><span class="badge br">납기임박</span></td></tr>
+          <tr><td><span class="lot">SO-616-035</span></td><td class="fw7">CU편의점</td><td>냉동삼겹살</td><td>200g</td><td class="mono">5,000팩</td><td class="mono">₩2,800</td><td class="mono fw7 cn">1,400만원</td><td>2025.06.18</td><td><span class="badge bg">출하완료</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 완제품 재고 ══════════ -->
-<div id="page-finstock" class="page">
-  <div class="grid g4 mb16">
-    <div class="card kpi-card"><div class="kpi-label">총 완제품 재고</div><div class="kpi-value c-green">27,000<span>팩</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">삼겹살 (200g)</div><div class="kpi-value">12,450<span>팩</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">목살 (300g)</div><div class="kpi-value" style="color:var(--yellow)">8,230<span>팩</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">등심 (250g)</div><div class="kpi-value c-red">850<span>팩 ⚠</span></div></div>
+<!-- ═══ 출하·배송 ═══ -->
+
+<div id="p-shipment" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">오늘 출하 예정</div><div class="kv">8<span>건</span></div></div>
+    <div class="card kc"><div class="kl">출하 완료</div><div class="kv cg">5<span>건</span></div></div>
+    <div class="card kc"><div class="kl">오늘 출하량</div><div class="kv cb">18,450<span>kg</span></div></div>
+    <div class="card kc"><div class="kl">배차 가능 차량</div><div class="kv cn">3<span>대</span></div></div>
   </div>
-  <div class="grid g-3-2">
+  <div class="card">
+    <div class="ch"><div class="ct">출하 현황</div><button class="btn btn-p btn-sm" onclick="T('출하 지시서가 생성되었습니다.','ok')">+ 출하 지시</button></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>출하번호</th><th>거래처</th><th>제품</th><th>수량</th><th>중량</th><th>차량</th><th>기사</th><th>출하시각</th><th>도착지</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td><span class="lot">SH-618-08</span></td><td class="fw7">CU편의점</td><td>냉동삼겹살 200g</td><td class="mono">2,000팩</td><td class="mono">400kg</td><td>12가3456</td><td>김기사</td><td>08:00</td><td>인천 물류센터</td><td><span class="badge bg">배송완료</span></td></tr>
+          <tr><td><span class="lot">SH-618-07</span></td><td class="fw7">이마트 물류</td><td>냉동목살 300g</td><td class="mono">1,500팩</td><td class="mono">450kg</td><td>34나7890</td><td>이기사</td><td>09:30</td><td>용인 물류센터</td><td><span class="badge bg">배송완료</span></td></tr>
+          <tr><td><span class="lot">SH-618-03</span></td><td class="fw7">농협유통</td><td>냉동목살 300g</td><td class="mono">2,000팩</td><td class="mono">600kg</td><td>34나7890</td><td>이기사</td><td>14:00</td><td>안양 하나로</td><td><span class="badge by">배송중</span></td></tr>
+          <tr><td><span class="lot">SH-618-02</span></td><td class="fw7">CU편의점</td><td>냉동삼겹살 200g</td><td class="mono">4,500팩</td><td class="mono">900kg</td><td>56다1234</td><td>박기사</td><td>15:00</td><td>성남 물류</td><td><span class="badge by">상차중</span></td></tr>
+          <tr><td><span class="lot">SH-618-01</span></td><td class="fw7">코스트코</td><td>냉동삼겹살 1kg</td><td class="mono">500팩</td><td class="mono">500kg</td><td>—</td><td>—</td><td>16:30 예정</td><td>일산 코스트코</td><td><span class="badge bgr">대기중</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 완제품 재고 ═══ -->
+
+<div id="p-finstock" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">총 완제품 재고</div><div class="kv cg">27,000<span>팩</span></div></div>
+    <div class="card kc"><div class="kl">삼겹살 (200g)</div><div class="kv">12,450<span>팩</span></div></div>
+    <div class="card kc"><div class="kl">목살 (300g)</div><div class="kv cy">8,230<span>팩</span></div></div>
+    <div class="card kc"><div class="kl">등심 (250g)</div><div class="kv cr">850<span>팩 ⚠</span></div></div>
+  </div>
+  <div class="g g32">
     <div class="card">
-      <div class="card-header"><div class="card-title">완제품 재고 상세</div></div>
-      <div class="table-wrap">
+      <div class="ch"><div class="ct">완제품 재고 상세</div></div>
+      <div class="tw">
         <table>
-          <thead><tr><th>품목코드</th><th>제품명</th><th>규격</th><th>배치번호</th><th>제조일</th><th>유통기한</th><th>위치</th><th>재고</th><th>안전재고</th><th>상태</th></tr></thead>
+          <thead><tr><th>코드</th><th>제품명</th><th>규격</th><th>배치번호</th><th>제조일</th><th>유통기한</th><th>위치</th><th>재고</th><th>안전재고</th><th>상태</th></tr></thead>
           <tbody>
-            <tr><td>FG-001</td><td class="fw-7">냉동 삼겹살</td><td>200g 낱개</td><td><span class="lot-tag">FG-250618-001</span></td><td>25.06.18</td><td>26.06.17</td><td>완제품고 A-01</td><td class="td-mono fw-7 c-green">8,420팩</td><td class="td-mono">3,000팩</td><td><span class="badge b-green">충분</span></td></tr>
-            <tr><td>FG-002</td><td class="fw-7">냉동 삼겹살</td><td>200g × 5팩</td><td><span class="lot-tag">FG-250617-002</span></td><td>25.06.17</td><td>26.06.16</td><td>완제품고 A-02</td><td class="td-mono fw-7 c-green">4,030팩</td><td class="td-mono">2,000팩</td><td><span class="badge b-green">충분</span></td></tr>
-            <tr><td>FG-003</td><td class="fw-7">냉동 목살</td><td>300g 낱개</td><td><span class="lot-tag">FG-250618-003</span></td><td>25.06.18</td><td>26.06.17</td><td>완제품고 B-01</td><td class="td-mono fw-7 c-green">6,180팩</td><td class="td-mono">2,500팩</td><td><span class="badge b-green">충분</span></td></tr>
-            <tr><td>FG-004</td><td class="fw-7">냉동 목살</td><td>300g × 3팩</td><td><span class="lot-tag">FG-250617-004</span></td><td>25.06.17</td><td>26.06.16</td><td>완제품고 B-02</td><td class="td-mono fw-7" style="color:var(--yellow)">2,050팩</td><td class="td-mono">2,000팩</td><td><span class="badge b-yellow">주의</span></td></tr>
-            <tr><td>FG-005</td><td class="fw-7">냉동 앞다리살</td><td>500g 낱개</td><td><span class="lot-tag">FG-250618-005</span></td><td>25.06.18</td><td>26.06.17</td><td>완제품고 C-01</td><td class="td-mono fw-7 c-green">5,650팩</td><td class="td-mono">2,000팩</td><td><span class="badge b-green">충분</span></td></tr>
-            <tr><td>FG-006</td><td class="fw-7">냉동 등심</td><td>250g 낱개</td><td><span class="lot-tag">FG-250616-006</span></td><td>25.06.16</td><td>26.06.15</td><td>완제품고 C-02</td><td class="td-mono fw-7 c-red">850팩</td><td class="td-mono">2,000팩</td><td><span class="badge b-red">부족</span></td></tr>
-            <tr><td>FG-007</td><td class="fw-7">냉동 삼겹살</td><td>1kg 대용량</td><td><span class="lot-tag">FG-250615-007</span></td><td>25.06.15</td><td>26.06.14</td><td>완제품고 A-03</td><td class="td-mono fw-7" style="color:var(--yellow)">1,820팩</td><td class="td-mono">1,500팩</td><td><span class="badge b-yellow">주의</span></td></tr>
+            <tr><td>FG-001</td><td class="fw7">냉동 삼겹살</td><td>200g 낱개</td><td><span class="lot">FG-250618-001</span></td><td>25.06.18</td><td>26.06.17</td><td>A-01</td><td class="mono fw7 cg">8,420팩</td><td class="mono">3,000팩</td><td><span class="badge bg">충분</span></td></tr>
+            <tr><td>FG-002</td><td class="fw7">냉동 목살</td><td>300g 낱개</td><td><span class="lot">FG-250618-003</span></td><td>25.06.18</td><td>26.06.17</td><td>B-01</td><td class="mono fw7 cg">6,180팩</td><td class="mono">2,500팩</td><td><span class="badge bg">충분</span></td></tr>
+            <tr><td>FG-003</td><td class="fw7">냉동 앞다리살</td><td>500g 낱개</td><td><span class="lot">FG-250618-005</span></td><td>25.06.18</td><td>26.06.17</td><td>C-01</td><td class="mono fw7 cg">5,650팩</td><td class="mono">2,000팩</td><td><span class="badge bg">충분</span></td></tr>
+            <tr><td>FG-004</td><td class="fw7">냉동 등심</td><td>250g 낱개</td><td><span class="lot">FG-250616-006</span></td><td>25.06.16</td><td>26.06.15</td><td>C-02</td><td class="mono fw7 cr">850팩</td><td class="mono">2,000팩</td><td><span class="badge br">부족</span></td></tr>
+            <tr><td>FG-005</td><td class="fw7">냉동 삼겹살</td><td>1kg 대용량</td><td><span class="lot">FG-250615-007</span></td><td>25.06.15</td><td>26.06.14</td><td>A-03</td><td class="mono fw7 cy">1,820팩</td><td class="mono">1,500팩</td><td><span class="badge by">주의</span></td></tr>
           </tbody>
         </table>
       </div>
     </div>
     <div class="card">
-      <div class="card-header"><div class="card-title">가용 일수 분석</div></div>
-      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:16px">
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">냉동 삼겹살 200g</span><span class="fs-12 fw-7 c-green">D+14</span></div><div class="prog"><div class="prog-fill" style="width:95%;background:var(--green)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">냉동 목살 300g</span><span class="fs-12 fw-7 c-green">D+11</span></div><div class="prog"><div class="prog-fill" style="width:80%;background:var(--green)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">냉동 앞다리살 500g</span><span class="fs-12 fw-7" style="color:var(--yellow)">D+8</span></div><div class="prog"><div class="prog-fill" style="width:60%;background:var(--yellow)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">냉동 등심 250g</span><span class="fs-12 fw-7 c-red">D+2 ⚠</span></div><div class="prog"><div class="prog-fill" style="width:12%;background:var(--red)"></div></div></div>
+      <div class="ch"><div class="ct">가용 일수 분석</div></div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">냉동 삼겹살 200g</span><span class="fs12 fw7 cg">D+14</span></div><div class="prog"><div class="pf" style="width:95%;background:var(--green)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">냉동 목살 300g</span><span class="fs12 fw7 cg">D+11</span></div><div class="prog"><div class="pf" style="width:80%;background:var(--green)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">냉동 앞다리살 500g</span><span class="fs12 fw7 cy">D+8</span></div><div class="prog"><div class="pf" style="width:60%;background:var(--yellow)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">냉동 등심 250g</span><span class="fs12 fw7 cr">D+2 ⚠</span></div><div class="prog"><div class="pf" style="width:12%;background:var(--red)"></div></div></div>
       </div>
-      <hr class="divider">
-      <div class="notice notice-err" style="margin-bottom:12px;font-size:12px">등심 250g 재고 부족 — 즉시 생산 지시 필요</div>
-      <button class="btn btn-primary" style="width:100%" onclick="goto('production');toast('등심 긴급 생산 작업지시가 생성되었습니다.','ok')">긴급 생산 지시</button>
+      <hr>
+      <div class="notice ne" style="margin-bottom:10px;font-size:12px">등심 250g 재고 부족 — 즉시 생산 지시 필요</div>
+      <button class="btn btn-p" style="width:100%" onclick="G('production');T('등심 긴급 생산 지시가 생성되었습니다.','ok')">긴급 생산 지시</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 품질 관리 ══════════ -->
-<div id="page-quality" class="page">
-  <div class="grid g4 mb16">
-    <div class="card kpi-card"><div class="kpi-label">이달 검사 건수</div><div class="kpi-value">84<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">합격</div><div class="kpi-value c-green">81<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">불합격</div><div class="kpi-value c-red">3<span>건</span></div></div>
-    <div class="card kpi-card"><div class="kpi-label">클레임 (이달)</div><div class="kpi-value" style="color:var(--yellow)">2<span>건</span></div></div>
+<!-- ═══ 품질 관리 ═══ -->
+
+<div id="p-quality" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">이달 검사 건수</div><div class="kv">84<span>건</span></div></div>
+    <div class="card kc"><div class="kl">합격</div><div class="kv cg">81<span>건</span></div></div>
+    <div class="card kc"><div class="kl">불합격</div><div class="kv cr">3<span>건</span></div></div>
+    <div class="card kc"><div class="kl">클레임 (이달)</div><div class="kv cy">2<span>건</span></div></div>
   </div>
-  <div class="grid g-3-2">
-    <div class="card">
-      <div class="card-header"><div class="card-title">품질 검사 이력</div><button class="btn btn-primary btn-sm" onclick="toast('품질 검사 기록이 등록되었습니다.','ok')">+ 검사 기록</button></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>검사번호</th><th>LOT/배치</th><th>제품</th><th>검사항목</th><th>검사일</th><th>중심온도</th><th>중량편차</th><th>관능검사</th><th>세균수</th><th>판정</th></tr></thead>
-          <tbody>
-            <tr><td>QC-618-014</td><td><span class="lot-tag">WO-618-001</span></td><td>삼겹살 200g</td><td>출하전</td><td>06.18</td><td><span class="temp temp-ok">-18°C</span></td><td>±2.1g</td><td>양호</td><td>음성</td><td><span class="badge b-green">합격</span></td></tr>
-            <tr><td>QC-618-013</td><td><span class="lot-tag">WO-618-003</span></td><td>목살 300g</td><td>출하전</td><td>06.18</td><td><span class="temp temp-ok">-18°C</span></td><td>±3.5g</td><td>양호</td><td>음성</td><td><span class="badge b-green">합격</span></td></tr>
-            <tr><td>QC-618-012</td><td><span class="lot-tag">LOT-250528-CA</span></td><td>등심 원육</td><td>입고검사</td><td>06.18</td><td><span class="temp temp-warn">-12°C ⚠</span></td><td>—</td><td>양호</td><td>진행중</td><td><span class="badge b-yellow">보류</span></td></tr>
-            <tr><td>QC-617-011</td><td><span class="lot-tag">WO-617-018</span></td><td>앞다리 500g</td><td>공정검사</td><td>06.17</td><td><span class="temp temp-ok">-18°C</span></td><td>±4.8g</td><td>이취있음</td><td>양성</td><td><span class="badge b-red">불합격</span></td></tr>
-            <tr><td>QC-617-010</td><td><span class="lot-tag">WO-617-015</span></td><td>삼겹살 200g</td><td>출하전</td><td>06.17</td><td><span class="temp temp-ok">-18°C</span></td><td>±1.8g</td><td>양호</td><td>음성</td><td><span class="badge b-green">합격</span></td></tr>
-            <tr><td>QC-616-009</td><td><span class="lot-tag">LOT-250601-DK</span></td><td>앞다리 원육</td><td>입고검사</td><td>06.16</td><td><span class="temp temp-ok">-18°C</span></td><td>—</td><td>양호</td><td>음성</td><td><span class="badge b-green">합격</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">품질 합격율 추이</div></div>
-      <canvas id="c-quality" height="180"></canvas>
-      <hr class="divider">
-      <ul class="stat-list">
-        <li class="stat-item"><span class="stat-label">평균 중량 편차</span><span class="stat-val">±2.8g</span></li>
-        <li class="stat-item"><span class="stat-label">세균 검사 합격율</span><span class="stat-val c-green">96.4%</span></li>
-        <li class="stat-item"><span class="stat-label">관능 검사 합격율</span><span class="stat-val c-green">98.8%</span></li>
-        <li class="stat-item"><span class="stat-label">이달 클레임</span><span class="stat-val c-red">2건</span></li>
-      </ul>
+  <div class="card">
+    <div class="ch"><div class="ct">품질 검사 이력</div><button class="btn btn-p btn-sm" onclick="T('품질 검사 기록이 등록되었습니다.','ok')">+ 검사 기록</button></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>검사번호</th><th>LOT/배치</th><th>제품</th><th>검사항목</th><th>검사일</th><th>중심온도</th><th>중량편차</th><th>관능검사</th><th>세균수</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr><td>QC-618-014</td><td><span class="lot">WO-618-001</span></td><td>삼겹살 200g</td><td>출하전</td><td>06.18</td><td><span class="temp tok">-18°C</span></td><td>±2.1g</td><td>양호</td><td>음성</td><td><span class="badge bg">합격</span></td></tr>
+          <tr><td>QC-618-012</td><td><span class="lot">LOT-250528-CA</span></td><td>등심 원육</td><td>입고검사</td><td>06.18</td><td><span class="temp twn">-12°C ⚠</span></td><td>—</td><td>양호</td><td>진행중</td><td><span class="badge by">보류</span></td></tr>
+          <tr><td>QC-617-011</td><td><span class="lot">WO-617-018</span></td><td>앞다리 500g</td><td>공정검사</td><td>06.17</td><td><span class="temp tok">-18°C</span></td><td>±4.8g</td><td>이취있음</td><td>양성</td><td><span class="badge br">불합격</span></td></tr>
+          <tr><td>QC-617-010</td><td><span class="lot">WO-617-015</span></td><td>삼겹살 200g</td><td>출하전</td><td>06.17</td><td><span class="temp tok">-18°C</span></td><td>±1.8g</td><td>양호</td><td>음성</td><td><span class="badge bg">합격</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 거래처 관리 ══════════ -->
-<div id="page-suppliers" class="page">
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab(this)">국내 거래처 (매출처)</div>
-    <div class="tab" onclick="switchTab(this)">해외 공급업체</div>
-  </div>
-  <div class="grid g-3-2">
-    <div class="card">
-      <div class="card-header"><div class="card-title">국내 거래처</div><button class="btn btn-primary btn-sm" onclick="toast('새 거래처가 등록되었습니다.','ok')">+ 거래처 등록</button></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>거래처명</th><th>구분</th><th>담당자</th><th>이달 수주</th><th>이달 매출</th><th>미수금</th><th>여신한도</th><th>등급</th></tr></thead>
-          <tbody>
-            <tr><td class="fw-7">CU편의점 (BGF리테일)</td><td><span class="badge b-blue">대형유통</span></td><td>박바이어</td><td class="td-mono">12건</td><td class="td-mono fw-7 c-brand">1.82억</td><td class="td-mono c-red">2,400만</td><td>5억원</td><td><span class="badge b-green">A</span></td></tr>
-            <tr><td class="fw-7">이마트 (신세계)</td><td><span class="badge b-blue">대형유통</span></td><td>김바이어</td><td class="td-mono">8건</td><td class="td-mono fw-7 c-brand">1.54억</td><td class="td-mono">800만</td><td>5억원</td><td><span class="badge b-green">A</span></td></tr>
-            <tr><td class="fw-7">롯데마트 물류</td><td><span class="badge b-blue">대형유통</span></td><td>최바이어</td><td class="td-mono">7건</td><td class="td-mono fw-7 c-brand">1.12억</td><td class="td-mono">500만</td><td>3억원</td><td><span class="badge b-green">A</span></td></tr>
-            <tr><td class="fw-7">GS리테일</td><td><span class="badge b-purple">편의점</span></td><td>이바이어</td><td class="td-mono">6건</td><td class="td-mono fw-7 c-brand">8,900만</td><td class="td-mono">—</td><td>2억원</td><td><span class="badge b-yellow">B</span></td></tr>
-            <tr><td class="fw-7">농협유통</td><td><span class="badge b-green">농협계열</span></td><td>정바이어</td><td class="td-mono">4건</td><td class="td-mono fw-7 c-brand">6,200만</td><td class="td-mono c-red">1,200만</td><td>2억원</td><td><span class="badge b-yellow">B</span></td></tr>
-            <tr><td class="fw-7">코스트코 코리아</td><td><span class="badge b-cyan">창고형</span></td><td>한바이어</td><td class="td-mono">3건</td><td class="td-mono fw-7 c-brand">4,800만</td><td class="td-mono">—</td><td>1억원</td><td><span class="badge b-yellow">B</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">거래처별 매출 비중</div></div>
-      <canvas id="c-customer" height="160"></canvas>
-      <hr class="divider">
-      <div class="card-header" style="margin-bottom:8px"><div class="card-title">해외 공급업체 평가</div></div>
-      <ul class="stat-list">
-        <li class="stat-item"><div><div class="fw-7 fs-12">Iberian Pork Co.</div><div class="fs-11 c-txt3">스페인 · 삼겹살 주공급</div></div><span class="badge b-green">A+</span></li>
-        <li class="stat-item"><div><div class="fw-7 fs-12">Danish Crown A/S</div><div class="fs-11 c-txt3">덴마크 · 목살·앞다리</div></div><span class="badge b-green">A</span></li>
-        <li class="stat-item"><div><div class="fw-7 fs-12">Nordic Meat GmbH</div><div class="fs-11 c-txt3">독일 · 목살</div></div><span class="badge b-yellow">B</span></li>
-        <li class="stat-item"><div><div class="fw-7 fs-12">Canada Pork Int'l</div><div class="fs-11 c-txt3">캐나다 · 등심</div></div><span class="badge b-yellow">B</span></li>
-      </ul>
+<!-- ═══ 거래처 관리 ═══ -->
+
+<div id="p-suppliers" class="page">
+  <div class="card">
+    <div class="ch"><div class="ct">국내 거래처</div><button class="btn btn-p btn-sm" onclick="T('새 거래처가 등록되었습니다.','ok')">+ 거래처 등록</button></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>거래처명</th><th>구분</th><th>담당자</th><th>이달 수주</th><th>이달 매출</th><th>미수금</th><th>여신한도</th><th>DSO</th><th>등급</th></tr></thead>
+        <tbody>
+          <tr><td class="fw7">CU편의점 (BGF)</td><td><span class="badge bb">대형유통</span></td><td>박바이어</td><td class="mono">12건</td><td class="mono fw7 cn">1.82억</td><td class="mono cr">2,400만</td><td>5억원</td><td class="mono cy">32일</td><td><span class="badge bg">A</span></td></tr>
+          <tr><td class="fw7">이마트 (신세계)</td><td><span class="badge bb">대형유통</span></td><td>김바이어</td><td class="mono">8건</td><td class="mono fw7 cn">1.54억</td><td class="mono">800만</td><td>5억원</td><td class="mono cg">18일</td><td><span class="badge bg">A</span></td></tr>
+          <tr><td class="fw7">롯데마트 물류</td><td><span class="badge bb">대형유통</span></td><td>최바이어</td><td class="mono">7건</td><td class="mono fw7 cn">1.12억</td><td class="mono">500만</td><td>3억원</td><td class="mono cy">28일</td><td><span class="badge bg">A</span></td></tr>
+          <tr><td class="fw7">GS리테일</td><td><span class="badge bp">편의점</span></td><td>이바이어</td><td class="mono">6건</td><td class="mono fw7 cn">8,900만</td><td class="mono">—</td><td>2억원</td><td class="mono cg">14일</td><td><span class="badge by">B</span></td></tr>
+          <tr><td class="fw7">농협유통</td><td><span class="badge bg">농협계열</span></td><td>정바이어</td><td class="mono">4건</td><td class="mono fw7 cn">6,200만</td><td class="mono cr">1,200만</td><td>2억원</td><td class="mono cr">35일</td><td><span class="badge by">B</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
 
-<!-- ══════════ 경영 리포트 ══════════ -->
-<div id="page-reports" class="page">
-  <div class="grid g4 mb16">
-    <div class="card kpi-card"><div class="kpi-header"><div><div class="kpi-label">연간 매출 (2025)</div><div class="kpi-value c-brand">38.4<span>억원</span></div></div><div class="kpi-icon ib-brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div></div><div class="kpi-footer"><span class="kpi-change kpi-up">▲ 18.2%</span><span class="kpi-sub-label">vs 2024</span></div></div>
-    <div class="card kpi-card"><div class="kpi-header"><div><div class="kpi-label">연간 수입 원가</div><div class="kpi-value c-blue">22.1<span>억원</span></div></div><div class="kpi-icon ib-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/></svg></div></div><div class="kpi-footer"><span class="kpi-change kpi-down">▼ 2.4%</span><span class="kpi-sub-label">원가 절감</span></div></div>
-    <div class="card kpi-card"><div class="kpi-header"><div><div class="kpi-label">영업이익률</div><div class="kpi-value c-green">14.2<span>%</span></div></div><div class="kpi-icon ib-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div></div><div class="kpi-footer"><span class="kpi-change kpi-up">▲ 2.1%p</span><span class="kpi-sub-label">개선</span></div></div>
-    <div class="card kpi-card"><div class="kpi-header"><div><div class="kpi-label">이달 생산 효율</div><div class="kpi-value" style="color:var(--purple)">97.8<span>%</span></div></div><div class="kpi-icon ib-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div></div><div class="kpi-footer"><span class="kpi-change kpi-up">목표 95% 초과</span></div></div>
+<!-- ═══ 경영 리포트 ═══ -->
+
+<div id="p-reports" class="page">
+  <div class="g g4 mb">
+    <div class="card kc"><div class="kl">연간 매출 (2025)</div><div class="kv cn">38.4<span>억원</span></div><div class="kf"><span class="kc-up">▲ 18.2%</span><span class="ks">vs 2024</span></div></div>
+    <div class="card kc"><div class="kl">연간 수입 원가</div><div class="kv cb">22.1<span>억원</span></div><div class="kf"><span class="kc-dn">▼ 2.4%</span><span class="ks">원가 절감</span></div></div>
+    <div class="card kc"><div class="kl">영업이익률</div><div class="kv cg">14.2<span>%</span></div><div class="kf"><span class="kc-up">▲ 2.1%p</span></div></div>
+    <div class="card kc"><div class="kl">이달 생산 효율</div><div class="kv cp">97.8<span>%</span></div><div class="kf"><span class="kc-up">목표 95% 초과</span></div></div>
   </div>
-  <div class="grid g-6-4 mb16">
+  <div class="g g64 mb">
+    <div class="card"><div class="ch"><div class="ct">월별 매출·원가·이익 추이</div><span class="fs10 c3">단위: 억원</span></div><canvas id="c-profit" height="220"></canvas></div>
     <div class="card">
-      <div class="card-header"><div class="card-title">월별 매출 · 원가 · 이익 추이</div><span class="fs-11 c-txt3">단위: 억원</span></div>
-      <canvas id="c-profit" height="220"></canvas>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">KPI 달성률</div></div>
-      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px">
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">월 생산량 목표</span><span class="fs-12 fw-7 c-green">112%</span></div><div class="prog"><div class="prog-fill" style="width:100%;background:var(--green)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">매출 목표</span><span class="fs-12 fw-7 c-brand">96%</span></div><div class="prog"><div class="prog-fill" style="width:96%;background:var(--brand)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">품질 합격율</span><span class="fs-12 fw-7 c-green">98%</span></div><div class="prog"><div class="prog-fill" style="width:98%;background:var(--green)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">납기 준수율</span><span class="fs-12 fw-7 c-blue">94%</span></div><div class="prog"><div class="prog-fill" style="width:94%;background:var(--blue)"></div></div></div>
-        <div><div class="flex jc-sb" style="margin-bottom:5px"><span class="fs-12 fw-7">손실율 감소 목표</span><span class="fs-12 fw-7" style="color:var(--yellow)">88%</span></div><div class="prog"><div class="prog-fill" style="width:88%;background:var(--yellow)"></div></div></div>
+      <div class="ch"><div class="ct">KPI 달성률</div></div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">월 생산량 목표</span><span class="fs12 fw7 cg">112%</span></div><div class="prog"><div class="pf" style="width:100%;background:var(--green)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">매출 목표</span><span class="fs12 fw7 cn">96%</span></div><div class="prog"><div class="pf" style="width:96%;background:var(--brand)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">품질 합격율</span><span class="fs12 fw7 cg">98%</span></div><div class="prog"><div class="pf" style="width:98%;background:var(--green)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">납기 준수율</span><span class="fs12 fw7 cb">94%</span></div><div class="prog"><div class="pf" style="width:94%;background:var(--blue)"></div></div></div>
+        <div><div class="flex jsb" style="margin-bottom:4px"><span class="fs12 fw7">손실율 감소</span><span class="fs12 fw7 cy">88%</span></div><div class="prog"><div class="pf" style="width:88%;background:var(--yellow)"></div></div></div>
       </div>
-      <hr class="divider">
-      <div class="card-header" style="margin-bottom:8px"><div class="card-title">원가 구조</div></div>
-      <ul class="stat-list">
-        <li class="stat-item"><span class="stat-label">원자재비 (수입원육)</span><span class="stat-val">68.2%</span></li>
-        <li class="stat-item"><span class="stat-label">인건비</span><span class="stat-val">12.4%</span></li>
-        <li class="stat-item"><span class="stat-label">포장재비</span><span class="stat-val">7.8%</span></li>
-        <li class="stat-item"><span class="stat-label">냉동·보관비</span><span class="stat-val">4.2%</span></li>
-        <li class="stat-item"><span class="stat-label">물류·운송비</span><span class="stat-val">3.8%</span></li>
-        <li class="stat-item"><span class="stat-label">기타 경비</span><span class="stat-val">3.6%</span></li>
+      <hr>
+      <ul class="sl">
+        <li class="si"><span class="sl-l">원자재비</span><span class="sl-v">68.2%</span></li>
+        <li class="si"><span class="sl-l">인건비</span><span class="sl-v">12.4%</span></li>
+        <li class="si"><span class="sl-l">포장재비</span><span class="sl-v">7.8%</span></li>
+        <li class="si"><span class="sl-l">냉동·보관비</span><span class="sl-v">4.2%</span></li>
+        <li class="si"><span class="sl-l">물류·운송비</span><span class="sl-v">3.8%</span></li>
       </ul>
     </div>
   </div>
 </div>
-```
 
   </div><!-- /content -->
 </div><!-- /main -->
 
-<!-- ══════════ 수주 등록 모달 ══════════ -->
+<!-- MODAL -->
 
-<div class="modal-bg" id="modal-order">
-  <div class="modal-box">
-    <div class="modal-title">📋 신규 수주 등록</div>
-    <div class="form-grid-2">
-      <div class="form-row"><label class="form-label">거래처 *</label><select class="form-ctrl"><option>CU편의점</option><option>이마트 물류</option><option>롯데마트</option><option>GS리테일</option><option>농협유통</option><option>코스트코</option></select></div>
-      <div class="form-row"><label class="form-label">제품 *</label><select class="form-ctrl"><option>냉동삼겹살 200g</option><option>냉동목살 300g</option><option>냉동앞다리 500g</option><option>냉동등심 250g</option><option>냉동삼겹살 1kg</option></select></div>
-      <div class="form-row"><label class="form-label">수량 (팩) *</label><input class="form-ctrl" type="number" value="1000" min="1"></div>
-      <div class="form-row"><label class="form-label">단가 (원) *</label><input class="form-ctrl" type="number" value="2800"></div>
-      <div class="form-row"><label class="form-label">납기일 *</label><input class="form-ctrl" type="date"></div>
-      <div class="form-row"><label class="form-label">배송지</label><input class="form-ctrl" type="text" placeholder="물류센터 주소"></div>
-    </div>
-    <div class="form-row"><label class="form-label">비고</label><input class="form-ctrl" type="text" placeholder="특이사항 입력"></div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal()">취소</button>
-      <button class="btn btn-primary" onclick="submitOrder()">수주 등록</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════ TOAST ══════════ -->
-
-<div id="toast">
-  <svg id="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"></svg>
-  <span id="tm"></span>
-</div>
+<div class="mbg" id="modal"><div class="mbox"><div class="mt2">📋 신규 수주 등록</div><div class="fg2"><div class="fr"><label class="fl">거래처 *</label><select class="fc"><option>CU편의점</option><option>이마트 물류</option><option>롯데마트</option><option>GS리테일</option></select></div><div class="fr"><label class="fl">제품 *</label><select class="fc"><option>냉동삼겹살 200g</option><option>냉동목살 300g</option><option>냉동앞다리 500g</option><option>냉동등심 250g</option></select></div><div class="fr"><label class="fl">수량 (팩) *</label><input class="fc" type="number" value="1000"></div><div class="fr"><label class="fl">단가 (원) *</label><input class="fc" type="number" value="2800"></div><div class="fr"><label class="fl">납기일 *</label><input class="fc" type="date"></div><div class="fr"><label class="fl">배송지</label><input class="fc" type="text" placeholder="물류센터 주소"></div></div><div class="mf"><button class="btn btn-s" onclick="closeM()">취소</button><button class="btn btn-p" onclick="closeM();T('수주가 등록되었습니다! SO-250618-043','ok')">수주 등록</button></div></div></div>
+<!-- TOAST -->
+<div id="toast"><svg id="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px"></svg><span id="tm"></span></div>
 
 <script>
-/* ─── TIME ─── */
-(function tick(){
-  const now = new Date();
-  const d = now.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'});
-  const t = now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('tb-time').textContent = d + ' ' + t;
-  setTimeout(tick, 1000);
-})();
+/* TIME */
+(function tick(){const n=new Date();document.getElementById('tbt2').textContent=n.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'})+' '+n.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});setTimeout(tick,1000);})();
 
-/* ─── NAV ─── */
-const META = {
-  dashboard:  ['대시보드',       '홈 / 대시보드'],
-  import:     ['수입 관리',      '수입·원자재 / 수입 관리'],
-  rawstock:   ['원자재 재고',    '수입·원자재 / 원자재 재고'],
-  production: ['생산·절단 관리','생산·가공 / 생산·절단 관리'],
-  packaging:  ['포장 관리',      '생산·가공 / 포장 관리'],
-  sales:      ['수주·판매',      '영업·출하 / 수주·판매'],
-  shipment:   ['출하·배송',      '영업·출하 / 출하·배송'],
-  finstock:   ['완제품 재고',    '영업·출하 / 완제품 재고'],
-  quality:    ['품질 관리',      '품질·관리 / 품질 관리'],
-  suppliers:  ['거래처 관리',    '품질·관리 / 거래처 관리'],
-  reports:    ['경영 리포트',    '품질·관리 / 경영 리포트'],
-};
-let curPage = 'dashboard';
-function goto(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => {
-    if ((n.getAttribute('onclick')||'').includes("'"+id+"'")) n.classList.add('active');
-  });
-  const m = META[id] || [id, id];
-  document.getElementById('tb-title').textContent = m[0];
-  document.getElementById('tb-bread').textContent = m[1];
-  curPage = id;
-  setTimeout(() => drawCharts(id), 60);
-}
-function switchTab(el) {
-  el.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+/* NAV */
+const META={dashboard:['대시보드','홈 / 대시보드'],ai:['회전율 가속 AI','AI 분석 / 회전율 가속 AI 모듈'],import:['수입 관리','수입 · 원자재 / 수입 관리'],rawstock:['원자재 재고','수입 · 원자재 / 원자재 재고'],production:['생산 · 절단','생산 · 가공 / 생산 · 절단'],packaging:['포장 관리','생산 · 가공 / 포장 관리'],sales:['수주 · 판매','영업 · 출하 / 수주 · 판매'],shipment:['출하 · 배송','영업 · 출하 / 출하 · 배송'],finstock:['완제품 재고','영업 · 출하 / 완제품 재고'],quality:['품질 관리','품질 · 관리 / 품질 관리'],suppliers:['거래처 관리','품질 · 관리 / 거래처 관리'],reports:['경영 리포트','품질 · 관리 / 경영 리포트']};
+let cur='dashboard';
+function G(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('p-'+id);
+  if(pg) pg.classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>{if((n.getAttribute('onclick')||'').includes("'"+id+"'"))n.classList.add('active');});
+  const m=META[id]||[id,id];
+  document.getElementById('tbt').textContent=m[0];
+  document.getElementById('tbb').textContent=m[1];
+  cur=id;
+  setTimeout(()=>DC(id),50);
 }
 
-/* ─── MODAL ─── */
-function openOrderModal() { document.getElementById('modal-order').classList.add('open'); }
-function closeModal()     { document.getElementById('modal-order').classList.remove('open'); }
-function submitOrder()    { closeModal(); toast('수주가 등록되었습니다! SO-250618-043','ok'); }
-document.getElementById('modal-order').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+/* MODAL */
+function openM(){document.getElementById('modal').classList.add('open')}
+function closeM(){document.getElementById('modal').classList.remove('open')}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeM()});
 
-/* ─── TOAST ─── */
+/* TOAST */
 let _tt;
-function toast(msg, type) {
-  const el = document.getElementById('toast');
-  const ic = document.getElementById('ti');
-  document.getElementById('tm').textContent = msg;
-  el.className = 't-' + (type||'ok');
-  if(type==='ok')   ic.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
-  else if(type==='err') ic.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
-  else ic.innerHTML = '<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+function T(msg,type){
+  const el=document.getElementById('toast'),ic=document.getElementById('ti');
+  document.getElementById('tm').textContent=msg;
+  el.className=type==='ok'?'tok2':'twn2';
+  ic.innerHTML=type==='ok'?'<polyline points="20 6 9 17 4 12"/>':'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
   el.classList.add('show');
-  clearTimeout(_tt);
-  _tt = setTimeout(() => el.classList.remove('show'), 3000);
+  clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);
 }
 
-/* ─── CANVAS CHARTS ─── */
-function rr(ctx,x,y,w,h,r) {
-  ctx.beginPath();
-  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
-  ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
-  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
-  ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
-  ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+/* CANVAS HELPERS */
+function RS(canvas){
+  const dpr=window.devicePixelRatio||1,r=canvas.getBoundingClientRect();
+  canvas.width=r.width*dpr;canvas.height=r.height*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  canvas.style.width=r.width+'px';canvas.style.height=r.height+'px';
+  return{ctx,W:r.width,H:r.height};
 }
-function resize(canvas) {
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
-  canvas.width  = rect.width  * dpr;
-  canvas.height = rect.height * dpr;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-  canvas.style.width  = rect.width  + 'px';
-  canvas.style.height = rect.height + 'px';
-  return { ctx, W: rect.width, H: rect.height };
+function rr(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
 }
 
-function drawMonthly() {
-  const canvas = document.getElementById('c-monthly'); if(!canvas) return;
-  canvas.style.width='100%'; canvas.style.height='200px';
-  const {ctx,W,H} = resize(canvas);
-  const months = ['1월','2월','3월','4월','5월','6월'];
-  const prod = [280,295,310,298,315,312];
-  const ship = [265,280,295,285,305,302];
-  const maxV=350, pad={l:40,r:12,t:20,b:30};
-  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
-  // grid
-  for(let i=0;i<=5;i++){
-    const y=pad.t+cH-(i/5)*cH;
-    ctx.strokeStyle = i===0?'#e4e7ed':'#f4f6f9';
-    ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
-    ctx.fillStyle='#9ca3af'; ctx.font='10px monospace'; ctx.textAlign='right';
-    ctx.fillText(Math.round(i/5*maxV),pad.l-5,y+4);
-  }
-  const bw=(cW/6)*0.3;
-  prod.forEach((v,i)=>{
-    const x=pad.l+(i+0.5)*(cW/6);
-    const h=(v/maxV)*cH;
-    const g=ctx.createLinearGradient(0,pad.t+cH-h,0,pad.t+cH);
-    g.addColorStop(0,'#3b82f6'); g.addColorStop(1,'rgba(59,130,246,.15)');
-    ctx.fillStyle=g; rr(ctx,x-bw-1,pad.t+cH-h,bw,h,3); ctx.fill();
-  });
-  ship.forEach((v,i)=>{
-    const x=pad.l+(i+0.5)*(cW/6);
-    const h=(v/maxV)*cH;
-    const g=ctx.createLinearGradient(0,pad.t+cH-h,0,pad.t+cH);
-    g.addColorStop(0,'#f97316'); g.addColorStop(1,'rgba(249,115,22,.15)');
-    ctx.fillStyle=g; rr(ctx,x+1,pad.t+cH-h,bw,h,3); ctx.fill();
-  });
-  months.forEach((m,i)=>{
-    ctx.fillStyle='#9ca3af'; ctx.font='10.5px sans-serif'; ctx.textAlign='center';
-    ctx.fillText(m, pad.l+(i+0.5)*(cW/6), H-6);
-  });
-  // legend
-  ctx.fillStyle='#3b82f6'; ctx.fillRect(W-130,8,10,9);
-  ctx.fillStyle='#6b7280'; ctx.font='10.5px sans-serif'; ctx.textAlign='left'; ctx.fillText('생산량(톤)',W-116,17);
-  ctx.fillStyle='#f97316'; ctx.fillRect(W-55,8,10,9);
-  ctx.fillStyle='#6b7280'; ctx.fillText('출하량',W-41,17);
+/* CHARTS */
+function drawMonthly(){
+  const c=document.getElementById('c-monthly');if(!c)return;
+  c.style.width='100%';c.style.height='200px';
+  const{ctx,W,H}=RS(c);
+  const mo=['1월','2월','3월','4월','5월','6월'],pr=[280,295,310,298,315,312],sh=[265,280,295,285,305,302],mx=350;
+  const p={l:36,r:10,t:16,b:26},cW=W-p.l-p.r,cH=H-p.t-p.b;
+  for(let i=0;i<=5;i++){const y=p.t+cH-(i/5)*cH;ctx.strokeStyle=i?'#f4f6f9':'#e4e7ed';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(W-p.r,y);ctx.stroke();ctx.fillStyle='#9ca3af';ctx.font='9px monospace';ctx.textAlign='right';ctx.fillText(Math.round(i/5*mx),p.l-4,y+3);}
+  const bw=(cW/6)*0.28;
+  pr.forEach((v,i)=>{const x=p.l+(i+.5)*(cW/6),h=(v/mx)*cH,g=ctx.createLinearGradient(0,p.t+cH-h,0,p.t+cH);g.addColorStop(0,'#3b82f6');g.addColorStop(1,'rgba(59,130,246,.15)');ctx.fillStyle=g;rr(ctx,x-bw-1,p.t+cH-h,bw,h,3);ctx.fill();});
+  sh.forEach((v,i)=>{const x=p.l+(i+.5)*(cW/6),h=(v/mx)*cH,g=ctx.createLinearGradient(0,p.t+cH-h,0,p.t+cH);g.addColorStop(0,'#f97316');g.addColorStop(1,'rgba(249,115,22,.15)');ctx.fillStyle=g;rr(ctx,x+1,p.t+cH-h,bw,h,3);ctx.fill();});
+  mo.forEach((m,i)=>{ctx.fillStyle='#9ca3af';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(m,p.l+(i+.5)*(cW/6),H-5);});
+  ctx.fillStyle='#3b82f6';ctx.fillRect(W-120,7,9,9);ctx.fillStyle='#6b7280';ctx.font='10px sans-serif';ctx.textAlign='left';ctx.fillText('생산량',W-107,15);
+  ctx.fillStyle='#f97316';ctx.fillRect(W-55,7,9,9);ctx.fillStyle='#6b7280';ctx.fillText('출하량',W-42,15);
+}
+function drawDonut(){
+  const c=document.getElementById('c-donut');if(!c)return;
+  c.style.width='100%';c.style.height='130px';
+  const{ctx,W,H}=RS(c);
+  const data=[31,23,21,16,9],cols=['#f97316','#3b82f6','#16a34a','#7c3aed','#9ca3af'];
+  const cx=W/2,cy=H/2,r=Math.min(cx,cy)-10,ri=r*.55;
+  let st=-Math.PI/2;
+  data.forEach((d,i)=>{const a=(d/100)*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,st,st+a);ctx.closePath();ctx.fillStyle=cols[i];ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.stroke();st+=a;});
+  ctx.beginPath();ctx.arc(cx,cy,ri,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+  ctx.fillStyle='#1a1f36';ctx.font='bold 14px monospace';ctx.textAlign='center';ctx.fillText('27,000',cx,cy);ctx.fillStyle='#9ca3af';ctx.font='9.5px sans-serif';ctx.fillText('총 재고(팩)',cx,cy+13);
+}
+function drawCCC(){
+  const c=document.getElementById('c-ccc');if(!c)return;
+  c.style.width='100%';c.style.height='160px';
+  const{ctx,W,H}=RS(c);
+  const mo=['1월','2월','3월','4월','5월','6월'],dso=[25,24,23,23,22,22],dio=[28,27,26,25,25,24],dpo=[6,6,7,7,8,8];
+  const ccc=dso.map((d,i)=>d+dio[i]-dpo[i]);
+  const p={l:34,r:10,t:14,b:26},cW=W-p.l-p.r,cH=H-p.t-p.b,mx=60;
+  [0,15,30,45,60].forEach(v=>{const y=p.t+cH-(v/mx)*cH;ctx.strokeStyle='#f4f6f9';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(W-p.r,y);ctx.stroke();ctx.fillStyle='#9ca3af';ctx.font='9px monospace';ctx.textAlign='right';ctx.fillText(v,p.l-3,y+3);});
+  const dl=(data,col,dash)=>{if(dash)ctx.setLineDash(dash);else ctx.setLineDash([]);ctx.beginPath();data.forEach((v,i)=>{const x=p.l+i*(cW/5),y=p.t+cH-(v/mx)*cH;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);};
+  dl(dso,'#3b82f6');dl(dio,'#d97706',[4,3]);dl(dpo,'#16a34a',[2,3]);dl(ccc,'#1a1f36');
+  mo.forEach((m,i)=>{ctx.fillStyle='#9ca3af';ctx.font='9.5px sans-serif';ctx.textAlign='center';ctx.fillText(m,p.l+i*(cW/5),H-5);});
+  const leg=[['CCC','#1a1f36'],['DSO','#3b82f6'],['DIO','#d97706'],['DPO','#16a34a']];
+  leg.forEach(([l,c],i)=>{ctx.fillStyle=c;ctx.font='bold 9px monospace';ctx.textAlign='left';ctx.fillText('─ '+l,6+i*55,12);});
+}
+function drawRadar(){
+  const c=document.getElementById('c-radar');if(!c)return;
+  c.style.width='100%';c.style.height='190px';
+  const{ctx,W,H}=RS(c);
+  const cx=W/2,cy=H/2+5,r=Math.min(W,H)/2-30;
+  const lbl=['재고회전율','채권회전율','채무최적화','생산효율','납기준수율','마진율'];
+  const cur=[.62,.64,.18,.78,.94,.71],tgt=[.95,.95,.75,.92,.99,.89];
+  const N=lbl.length;
+  [.25,.5,.75,1].forEach(s=>{ctx.beginPath();for(let i=0;i<N;i++){const a=(i/N)*Math.PI*2-Math.PI/2,x=cx+Math.cos(a)*r*s,y=cy+Math.sin(a)*r*s;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.closePath();if(s===.5){ctx.fillStyle='#f4f6f9';ctx.fill();}ctx.strokeStyle='#e4e7ed';ctx.lineWidth=1;ctx.stroke();});
+  for(let i=0;i<N;i++){const a=(i/N)*Math.PI*2-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.strokeStyle='#e4e7ed';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle='#6b7280';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText(lbl[i],cx+Math.cos(a)*(r+18),cy+Math.sin(a)*(r+18)+4);}
+  const dp=(data,col,al)=>{ctx.beginPath();data.forEach((v,i)=>{const a=(i/N)*Math.PI*2-Math.PI/2,x=cx+Math.cos(a)*r*v,y=cy+Math.sin(a)*r*v;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle=col.replace('rgb','rgba').replace(')',','+al+')');ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke();};
+  dp(tgt,'rgb(22,163,74)',.08);dp(cur,'rgb(249,115,22)',.2);
+  cur.forEach((v,i)=>{const a=(i/N)*Math.PI*2-Math.PI/2;ctx.beginPath();ctx.arc(cx+Math.cos(a)*r*v,cy+Math.sin(a)*r*v,3.5,0,Math.PI*2);ctx.fillStyle='#f97316';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();});
+  ctx.fillStyle='rgba(249,115,22,.8)';rr(ctx,6,H-18,9,9,2);ctx.fill();ctx.fillStyle='#6b7280';ctx.font='10px sans-serif';ctx.textAlign='left';ctx.fillText('현재',18,H-11);
+  ctx.fillStyle='rgba(22,163,74,.8)';rr(ctx,52,H-18,9,9,2);ctx.fill();ctx.fillText('목표',64,H-11);
+}
+function drawProfit(){
+  const c=document.getElementById('c-profit');if(!c)return;
+  c.style.width='100%';c.style.height='220px';
+  const{ctx,W,H}=RS(c);
+  const mo=['1월','2월','3월','4월','5월','6월'],rev=[5.8,6.1,6.4,6.2,6.8,6.5],cost=[4.2,4.4,4.5,4.4,4.7,4.5],prof=rev.map((v,i)=>+(v-cost[i]).toFixed(1));
+  const mx=8,p={l:36,r:10,t:22,b:30},cW=W-p.l-p.r,cH=H-p.t-p.b;
+  for(let i=0;i<=4;i++){const y=p.t+cH-(i/4)*cH;ctx.strokeStyle=i?'#f4f6f9':'#e4e7ed';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(W-p.r,y);ctx.stroke();ctx.fillStyle='#9ca3af';ctx.font='9px monospace';ctx.textAlign='right';ctx.fillText((i*2)+'억',p.l-4,y+3);}
+  const bw=(cW/6)*.24;
+  const db=(data,col,off)=>data.forEach((v,i)=>{const x=p.l+(i+.5)*(cW/6)+off,h=(v/mx)*cH,g=ctx.createLinearGradient(0,p.t+cH-h,0,p.t+cH);g.addColorStop(0,col);g.addColorStop(1,col+'28');ctx.fillStyle=g;rr(ctx,x-bw/2,p.t+cH-h,bw,h,2);ctx.fill();});
+  db(rev,'#3b82f6',-bw-1.5);db(cost,'#ef4444',0);db(prof,'#16a34a',bw+1.5);
+  mo.forEach((m,i)=>{ctx.fillStyle='#9ca3af';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(m,p.l+(i+.5)*(cW/6),H-6);});
+  [['매출','#3b82f6'],['원가','#ef4444'],['이익','#16a34a']].forEach(([l,col],i)=>{ctx.fillStyle=col;rr(ctx,8+i*55,7,9,9,2);ctx.fill();ctx.fillStyle='#6b7280';ctx.font='10px sans-serif';ctx.textAlign='left';ctx.fillText(l,21+i*55,16);});
 }
 
-function drawDonut(id, data, colors, cx_ratio) {
-  const canvas = document.getElementById(id); if(!canvas) return;
-  canvas.style.width='100%'; canvas.style.height=(canvas.getAttribute('height')||'140')+'px';
-  const {ctx,W,H} = resize(canvas);
-  const cx=W/2, cy=H/2, r=Math.min(cx,cy)-10, ri=r*0.56;
-  let start=-Math.PI/2;
-  data.forEach((d,i)=>{
-    const a=(d.v/100)*Math.PI*2;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,start+a); ctx.closePath();
-    ctx.fillStyle=colors[i]; ctx.fill();
-    ctx.strokeStyle='#fff'; ctx.lineWidth=2.5; ctx.stroke();
-    start+=a;
-  });
-  ctx.beginPath(); ctx.arc(cx,cy,ri,0,Math.PI*2);
-  ctx.fillStyle='#fff'; ctx.fill();
-  ctx.fillStyle='#1a1f36'; ctx.font='bold 15px monospace'; ctx.textAlign='center';
-  ctx.fillText('27,000', cx, cy-2);
-  ctx.fillStyle='#9ca3af'; ctx.font='10px sans-serif'; ctx.fillText('총 재고(팩)', cx, cy+13);
+/* SIM */
+const SD={1:{ccc:-8,cash:2.1,inv:7.6,mg:.8},2:{ccc:-9,cash:1.8,inv:11.5,mg:.4},3:{ccc:-10,cash:2.4,inv:0,mg:.2},4:{ccc:-3,cash:.9,inv:4.6,mg:.5},5:{ccc:-7,cash:.3,inv:10.9,mg:1.7}};
+const SS={1:true,2:true,3:true,4:true,5:true};
+function togSc(n){SS[n]=!SS[n];document.getElementById('sc'+n)?.classList.toggle('on',SS[n]);document.querySelector('[data-i="'+n+'"]')?.classList.toggle('on',SS[n]);updSim();}
+function simTog(el){const n=+el.dataset.i;SS[n]=!SS[n];el.classList.toggle('on',SS[n]);document.getElementById('sc'+n)?.classList.toggle('on',SS[n]);updSim();}
+function updSim(){
+  let cc=0,ca=0,iv=0,mg=0,cnt=0;
+  Object.keys(SS).forEach(k=>{if(SS[k]){const d=SD[k];cc+=d.ccc;ca+=d.cash;iv+=d.inv;mg+=d.mg;cnt++;}});
+  const cf=Math.max(38+cc,15);
+  document.getElementById('sr1').textContent=cf+'일';
+  document.getElementById('sr1d').textContent='38일 → -'+(38-cf)+'일';
+  document.getElementById('sr2').textContent=cnt?'+'+ca.toFixed(1)+'억':'—';
+  document.getElementById('sr2d').textContent=cnt?'▲ '+cnt+'개 전략':'선택 없음';
+  const ivf=+(15.2+iv).toFixed(1);
+  document.getElementById('sr3').textContent=cnt?ivf+'회':'15.2회';
+  document.getElementById('sr3d').textContent=cnt?'15.2회 → +'+iv.toFixed(1)+'회':'변화없음';
+  const mf=(14.2+mg).toFixed(1);
+  document.getElementById('sr4').textContent=cnt?'+'+mg.toFixed(1)+'%p':'—';
+  document.getElementById('sr4d').textContent=cnt?'14.2% → '+mf+'%':'변화없음';
+  drawSim(cf);
+}
+function drawSim(cccFinal){
+  const c=document.getElementById('c-sim');if(!c)return;
+  c.style.width='100%';c.style.height='130px';
+  const{ctx,W,H}=RS(c);
+  const mo=['7월','8월','9월','10월','11월','12월'],steps=[38,35,32,28,25,cccFinal];
+  const p={l:36,r:10,t:14,b:26},cW=W-p.l-p.r,cH=H-p.t-p.b,minV=Math.min(cccFinal,12),maxV=42;
+  [12,20,28,36].forEach(v=>{const y=p.t+cH-((v-minV)/(maxV-minV))*cH;ctx.strokeStyle='rgba(0,0,0,.05)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(W-p.r,y);ctx.stroke();ctx.fillStyle='#9ca3af';ctx.font='9px monospace';ctx.textAlign='right';ctx.fillText(v+'일',p.l-3,y+3);});
+  const yB=p.t+cH-((38-minV)/(maxV-minV))*cH;
+  ctx.setLineDash([4,4]);ctx.strokeStyle='#ef4444';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(p.l,yB);ctx.lineTo(W-p.r,yB);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#ef4444';ctx.font='9px monospace';ctx.textAlign='left';ctx.fillText('현재 38일',p.l+4,yB-4);
+  const pts=steps.map((v,i)=>({x:p.l+i*(cW/5),y:p.t+cH-((v-minV)/(maxV-minV))*cH}));
+  ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+  ctx.lineTo(pts[pts.length-1].x,p.t+cH);ctx.lineTo(pts[0].x,p.t+cH);ctx.closePath();
+  const g=ctx.createLinearGradient(0,p.t,0,p.t+cH);g.addColorStop(0,'rgba(22,163,74,.2)');g.addColorStop(1,'rgba(22,163,74,.02)');ctx.fillStyle=g;ctx.fill();
+  ctx.beginPath();pts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+  ctx.strokeStyle='#16a34a';ctx.lineWidth=2.5;ctx.stroke();
+  pts.forEach((pt,i)=>{ctx.beginPath();ctx.arc(pt.x,pt.y,4,0,Math.PI*2);ctx.fillStyle=i===pts.length-1?'#f97316':'#16a34a';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#6b7280';ctx.font='9.5px sans-serif';ctx.textAlign='center';ctx.fillText(mo[i],pt.x,H-5);});
+  const lpt=pts[pts.length-1];ctx.fillStyle='#f97316';ctx.font='bold 11px monospace';ctx.textAlign='center';ctx.fillText(cccFinal+'일',lpt.x,lpt.y-9);
 }
 
-function drawOrigin() {
-  const canvas = document.getElementById('c-origin'); if(!canvas) return;
-  canvas.style.width='100%'; canvas.style.height='170px';
-  const {ctx,W,H} = resize(canvas);
-  const data=[{l:'스페인',v:42,c:'#f97316'},{l:'덴마크',v:28,c:'#7c3aed'},{l:'독일',v:18,c:'#0891b2'},{l:'캐나다',v:12,c:'#9ca3af'}];
-  const cx=W/2-30, cy=H/2, r=Math.min(cx,cy)-8, ri=r*0.52;
-  let start=-Math.PI/2;
-  data.forEach(d=>{
-    const a=(d.v/100)*Math.PI*2;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,start+a); ctx.closePath();
-    ctx.fillStyle=d.c; ctx.fill();
-    ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
-    const mid=start+a/2;
-    const lx=cx+Math.cos(mid)*r*0.72, ly=cy+Math.sin(mid)*r*0.72;
-    ctx.fillStyle='#fff'; ctx.font='bold 10px monospace'; ctx.textAlign='center';
-    ctx.fillText(d.v+'%',lx,ly+4);
-    start+=a;
-  });
-  ctx.beginPath(); ctx.arc(cx,cy,ri,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
-  data.forEach((d,i)=>{
-    const lx=W-60, ly=20+i*30;
-    ctx.fillStyle=d.c; rr(ctx,lx,ly-10,12,12,3); ctx.fill();
-    ctx.fillStyle='#6b7280'; ctx.font='11px sans-serif'; ctx.textAlign='left'; ctx.fillText(d.l,lx+16,ly);
-    ctx.fillStyle='#1a1f36'; ctx.font='bold 11px monospace'; ctx.fillText(d.v+'%',lx+16,ly+13);
-  });
+function DC(page){
+  if(page==='dashboard'){drawMonthly();drawDonut();}
+  if(page==='ai'){drawCCC();drawRadar();drawSim(21);}
+  if(page==='reports'){drawProfit();}
 }
-
-function drawQuality() {
-  const canvas = document.getElementById('c-quality'); if(!canvas) return;
-  canvas.style.width='100%'; canvas.style.height='180px';
-  const {ctx,W,H} = resize(canvas);
-  const months=['1월','2월','3월','4월','5월','6월'];
-  const rate=[97.2,96.8,98.1,97.5,96.9,98.2];
-  const pad={l:36,r:12,t:16,b:28}; const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
-  const minV=94, maxV=100;
-  for(let i=0;i<=3;i++){
-    const v=minV+i*2, y=pad.t+cH-((v-minV)/(maxV-minV))*cH;
-    ctx.strokeStyle='#f4f6f9'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
-    ctx.fillStyle='#9ca3af'; ctx.font='9px monospace'; ctx.textAlign='right'; ctx.fillText(v+'%',pad.l-4,y+3);
-  }
-  // area
-  ctx.beginPath();
-  rate.forEach((v,i)=>{ const x=pad.l+i*(cW/(rate.length-1)), y=pad.t+cH-((v-minV)/(maxV-minV))*cH; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
-  const lx2=pad.l+(rate.length-1)*(cW/(rate.length-1));
-  ctx.lineTo(lx2,pad.t+cH); ctx.lineTo(pad.l,pad.t+cH); ctx.closePath();
-  const g=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);
-  g.addColorStop(0,'rgba(22,163,74,.18)'); g.addColorStop(1,'rgba(22,163,74,0)');
-  ctx.fillStyle=g; ctx.fill();
-  ctx.beginPath();
-  rate.forEach((v,i)=>{ const x=pad.l+i*(cW/(rate.length-1)), y=pad.t+cH-((v-minV)/(maxV-minV))*cH; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
-  ctx.strokeStyle='#16a34a'; ctx.lineWidth=2; ctx.stroke();
-  rate.forEach((v,i)=>{
-    const x=pad.l+i*(cW/(rate.length-1)), y=pad.t+cH-((v-minV)/(maxV-minV))*cH;
-    ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2);
-    ctx.fillStyle='#16a34a'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.stroke();
-    ctx.fillStyle='#6b7280'; ctx.font='10px sans-serif'; ctx.textAlign='center'; ctx.fillText(months[i],x,H-6);
-  });
-}
-
-function drawProfit() {
-  const canvas = document.getElementById('c-profit'); if(!canvas) return;
-  canvas.style.width='100%'; canvas.style.height='220px';
-  const {ctx,W,H} = resize(canvas);
-  const months=['1월','2월','3월','4월','5월','6월'];
-  const rev=[5.8,6.1,6.4,6.2,6.8,6.5];
-  const cost=[4.2,4.4,4.5,4.4,4.7,4.5];
-  const prof=rev.map((r,i)=>+(r-cost[i]).toFixed(1));
-  const maxV=8, pad={l:38,r:12,t:24,b:32};
-  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
-  for(let i=0;i<=4;i++){
-    const y=pad.t+cH-(i/4)*cH;
-    ctx.strokeStyle=i===0?'#e4e7ed':'#f4f6f9'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
-    ctx.fillStyle='#9ca3af'; ctx.font='9px monospace'; ctx.textAlign='right'; ctx.fillText((i*2)+'억',pad.l-4,y+3);
-  }
-  const bw=(cW/6)*0.25;
-  const draw3=(data,color,offset)=>{
-    data.forEach((v,i)=>{
-      const x=pad.l+(i+0.5)*(cW/6)+offset, h=(v/maxV)*cH;
-      const g=ctx.createLinearGradient(0,pad.t+cH-h,0,pad.t+cH);
-      g.addColorStop(0,color); g.addColorStop(1,color+'28');
-      ctx.fillStyle=g; rr(ctx,x-bw/2,pad.t+cH-h,bw,h,2); ctx.fill();
-    });
-  };
-  draw3(rev,'#3b82f6',-bw-1.5);
-  draw3(cost,'#ef4444',0);
-  draw3(prof,'#16a34a',bw+1.5);
-  months.forEach((m,i)=>{ ctx.fillStyle='#9ca3af'; ctx.font='10.5px sans-serif'; ctx.textAlign='center'; ctx.fillText(m,pad.l+(i+0.5)*(cW/6),H-6); });
-  const leg=[['매출','#3b82f6'],['원가','#ef4444'],['이익','#16a34a']];
-  leg.forEach(([l,c],i)=>{ ctx.fillStyle=c; rr(ctx,8+i*58,8,10,9,2); ctx.fill(); ctx.fillStyle='#6b7280'; ctx.font='10.5px sans-serif'; ctx.textAlign='left'; ctx.fillText(l,22+i*58,17); });
-}
-
-function drawCustomer() {
-  const canvas = document.getElementById('c-customer'); if(!canvas) return;
-  canvas.style.width='100%'; canvas.style.height='160px';
-  const {ctx,W,H} = resize(canvas);
-  const rows=[{l:'CU편의점',v:29,c:'#f97316'},{l:'이마트',v:25,c:'#3b82f6'},{l:'롯데마트',v:18,c:'#16a34a'},{l:'GS리테일',v:14,c:'#7c3aed'},{l:'기타',v:14,c:'#9ca3af'}];
-  const pad={l:8,r:8,t:6,b:6};
-  const bh=(H-pad.t-pad.b-(rows.length-1)*6)/rows.length;
-  rows.forEach((d,i)=>{
-    const y=pad.t+i*(bh+6);
-    const bw=(d.v/100)*(W-pad.l-pad.r-70);
-    const g=ctx.createLinearGradient(pad.l,0,pad.l+bw,0);
-    g.addColorStop(0,d.c); g.addColorStop(1,d.c+'40');
-    ctx.fillStyle=g; rr(ctx,pad.l,y,bw,bh,3); ctx.fill();
-    ctx.fillStyle='#6b7280'; ctx.font='10.5px sans-serif'; ctx.textAlign='left'; ctx.fillText(d.l,pad.l+bw+7,y+bh/2+4);
-    ctx.fillStyle='#1a1f36'; ctx.font='bold 10.5px monospace'; ctx.textAlign='right'; ctx.fillText(d.v+'%',W-pad.r,y+bh/2+4);
-  });
-}
-
-function drawCharts(page) {
-  if(page==='dashboard') { drawMonthly(); drawDonut('c-donut',[{v:31},{v:23},{v:21},{v:16},{v:9}],['#f97316','#3b82f6','#16a34a','#7c3aed','#9ca3af']); }
-  if(page==='import')    { drawOrigin(); }
-  if(page==='quality')   { drawQuality(); }
-  if(page==='reports')   { drawProfit(); }
-  if(page==='suppliers') { drawCustomer(); }
-}
-setTimeout(()=>drawCharts('dashboard'),80);
-window.addEventListener('resize',()=>drawCharts(curPage));
+setTimeout(()=>DC('dashboard'),80);
+window.addEventListener('resize',()=>DC(cur));
 </script>
 
 </body>
